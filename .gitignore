@@ -1,14 +1,23 @@
-venv
-.idea
-__pycache__
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
 
-server/pswd
-server/news_microservice/.env_main
+# Node / client build
+node_modules/
+client/dist/
+
+# Local secrets and certificates
 .env
+client/certificates/
+server/pswd
 
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Local scripts
 start_services.bat
 tempCodeRunnerFile.bat
-
-et --soft b73a6758e2952a43aff7eb2923154f61203d85a1
-
-client/certificates
