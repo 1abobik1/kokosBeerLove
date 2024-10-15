@@ -2,6 +2,10 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from pathlib import Path
+
+# server/ holds the shared "common" package; in Docker it is on PYTHONPATH already.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 
 def main():

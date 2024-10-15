@@ -61,7 +61,7 @@ def verify_email(request):
             send_mail(
                 'Подтверждение регистрации',
                 f'Ваш код подтверждения: {code}',
-                settings.EMAIL_HOST_USER,
+                settings.DEFAULT_FROM_EMAIL,
                 [email],
                 fail_silently=False,
             )

@@ -1,125 +1,134 @@
 services:
   auth_microservice:
     build:
-      context: ./server/auth_microservice
+      context: ./server
+      args:
+        SERVICE: auth_microservice
+        PORT: 8000
     container_name: auth_microservice_container
-    command: sh -c 'until nc -z $DATABASE_HOST_AUTH $DATABASE_PORT_AUTH; do echo "Ожидание базы данных..."; sleep 1; done; python manage.py migrate && python manage.py runserver 0.0.0.0:8000'
+    restart: unless-stopped
     ports:
       - "8000:8000"
     volumes:
-      - ./server/auth_microservice:/app
       - uploads:/uploads
     depends_on:
-      - db_auth
+      db_auth:
+        condition: service_healthy
     env_file:
       - .env
     environment:
-      - DATABASE_NAME=${DATABASE_NAME_AUTH}
-      - DATABASE_USER=${DATABASE_USER_AUTH}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD_AUTH}
-      - DATABASE_HOST=db_auth
-      - DATABASE_PORT=${DATABASE_PORT_AUTH}
+      DATABASE_HOST_AUTH: db_auth
+      DATABASE_PORT_AUTH: 5432
+      REDIS_URL: redis://redis:6379
     networks:
       - mynetwork
 
   news_microservice:
     build:
-      context: ./server/news_microservice
+      context: ./server
+      args:
+        SERVICE: news_microservice
+        PORT: 8001
     container_name: news_microservice_container
-    command: sh -c 'until nc -z $DATABASE_HOST_NEWS $DATABASE_PORT_NEWS; do echo "Ожидание базы данных..."; sleep 1; done; python manage.py migrate && python manage.py runserver 0.0.0.0:8001'
+    restart: unless-stopped
     ports:
       - "8001:8001"
     volumes:
-      - ./server/news_microservice:/app
       - uploads:/uploads
     depends_on:
-      - db_news
-      - redis
+      db_news:
+        condition: service_healthy
+      redis:
+        condition: service_started
     env_file:
       - .env
     environment:
-      - DATABASE_NAME=${DATABASE_NAME_NEWS}
-      - DATABASE_USER=${DATABASE_USER_NEWS}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD_NEWS}
-      - DATABASE_HOST=db_news
-      - DATABASE_PORT=${DATABASE_PORT_NEWS}
+      DATABASE_HOST_NEWS: db_news
+      DATABASE_PORT_NEWS: 5432
+      REDIS_URL: redis://redis:6379
     networks:
       - mynetwork
 
   shop_microservice:
     build:
-      context: ./server/shop_microservice
+      context: ./server
+      args:
+        SERVICE: shop_microservice
+        PORT: 8003
     container_name: shop_microservice_container
-    command: sh -c 'until nc -z $DATABASE_HOST_SHOP $DATABASE_PORT_SHOP; do echo "Ожидание базы данных..."; sleep 1; done; python manage.py migrate && python manage.py runserver 0.0.0.0:8003'
+    restart: unless-stopped
     ports:
       - "8003:8003"
     volumes:
-      - ./server/shop_microservice:/app
       - uploads:/uploads
     depends_on:
-      - db_shop
-      - redis
+      db_shop:
+        condition: service_healthy
+      redis:
+        condition: service_started
     env_file:
       - .env
     environment:
-      - DATABASE_NAME=${DATABASE_NAME_SHOP}
-      - DATABASE_USER=${DATABASE_USER_SHOP}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD_SHOP}
-      - DATABASE_HOST=db_shop
-      - DATABASE_PORT=${DATABASE_PORT_SHOP}
+      DATABASE_HOST_SHOP: db_shop
+      DATABASE_PORT_SHOP: 5432
+      REDIS_URL: redis://redis:6379
     networks:
       - mynetwork
 
   match_microservice:
     build:
-      context: ./server/match_microservice
+      context: ./server
+      args:
+        SERVICE: match_microservice
+        PORT: 8002
     container_name: match_microservice_container
-    command: sh -c 'until nc -z $DATABASE_HOST_MATCH $DATABASE_PORT_MATCH; do echo "Ожидание базы данных..."; sleep 1; done; python manage.py migrate && python manage.py runserver 0.0.0.0:8002'
+    restart: unless-stopped
     ports:
       - "8002:8002"
     volumes:
-      - ./server/match_microservice:/app
       - uploads:/uploads
     depends_on:
-      - db_match
-      - redis
+      db_match:
+        condition: service_healthy
+      redis:
+        condition: service_started
     env_file:
       - .env
     environment:
-      - DATABASE_NAME=${DATABASE_NAME_MATCH}
-      - DATABASE_USER=${DATABASE_USER_MATCH}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD_MATCH}
-      - DATABASE_HOST=db_match
-      - DATABASE_PORT=${DATABASE_PORT_MATCH}
+      DATABASE_HOST_MATCH: db_match
+      DATABASE_PORT_MATCH: 5432
+      REDIS_URL: redis://redis:6379
     networks:
       - mynetwork
 
   kokoc_team_microservice:
     build:
-      context: ./server/kokoc_team_microservice
+      context: ./server
+      args:
+        SERVICE: kokoc_team_microservice
+        PORT: 8004
     container_name: kokoc_team_microservice_container
-    command: sh -c 'until nc -z $DATABASE_HOST_KOKOC_TEAM $DATABASE_PORT_KOKOC_TEAM; do echo "Ожидание базы данных..."; sleep 1; done; python manage.py migrate && python manage.py runserver 0.0.0.0:8004'
+    restart: unless-stopped
     ports:
       - "8004:8004"
     volumes:
-      - ./server/kokoc_team_microservice:/app
       - uploads:/uploads
     depends_on:
-      - db_kokoc_team
-      - redis
+      db_kokoc_team:
+        condition: service_healthy
+      redis:
+        condition: service_started
     env_file:
       - .env
     environment:
-      - DATABASE_NAME=${DATABASE_NAME_KOKOC_TEAM}
-      - DATABASE_USER=${DATABASE_USER_KOKOC_TEAM}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD_KOKOC_TEAM}
-      - DATABASE_HOST=db_kokoc_team
-      - DATABASE_PORT=${DATABASE_PORT_KOKOC_TEAM}
+      DATABASE_HOST_KOKOC_TEAM: db_kokoc_team
+      DATABASE_PORT_KOKOC_TEAM: 5432
+      REDIS_URL: redis://redis:6379
     networks:
       - mynetwork
 
   db_auth:
-    image: postgres
+    image: postgres:16-alpine
     container_name: postgres_db_auth
     environment:
       POSTGRES_USER: ${DATABASE_USER_AUTH}
@@ -129,11 +138,16 @@ services:
       - postgres_data_auth:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
     networks:
       - mynetwork
 
   db_news:
-    image: postgres
+    image: postgres:16-alpine
     container_name: postgres_db_news
     environment:
       POSTGRES_USER: ${DATABASE_USER_NEWS}
@@ -143,11 +157,16 @@ services:
       - postgres_data_news:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
     networks:
       - mynetwork
 
   db_shop:
-    image: postgres
+    image: postgres:16-alpine
     container_name: postgres_db_shop
     environment:
       POSTGRES_USER: ${DATABASE_USER_SHOP}
@@ -157,11 +176,16 @@ services:
       - postgres_data_shop:/var/lib/postgresql/data
     ports:
       - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
     networks:
       - mynetwork
 
   db_match:
-    image: postgres
+    image: postgres:16-alpine
     container_name: postgres_db_match
     environment:
       POSTGRES_USER: ${DATABASE_USER_MATCH}
@@ -171,11 +195,16 @@ services:
       - postgres_data_match:/var/lib/postgresql/data
     ports:
       - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
     networks:
       - mynetwork
 
   db_kokoc_team:
-    image: postgres
+    image: postgres:16-alpine
     container_name: postgres_db_kokoc_team
     environment:
       POSTGRES_USER: ${DATABASE_USER_KOKOC_TEAM}
@@ -185,11 +214,16 @@ services:
       - postgres_data_kokoc_team:/var/lib/postgresql/data
     ports:
       - "5436:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
     networks:
       - mynetwork
 
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
     container_name: redis_container
     ports:
       - "6379:6379"
