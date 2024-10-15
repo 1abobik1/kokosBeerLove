@@ -1,12 +1,10 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.decorators import (api_view, authentication_classes,
-                                       permission_classes)
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 
+from common.permissions import IsAdminToken
 from ...models import AboutFcKokoc
 from ...serializers import AboutFcKokocSerializer
 
@@ -49,18 +47,10 @@ from ...serializers import AboutFcKokocSerializer
     },
 )
 @api_view(["PUT", "PATCH"])
-@authentication_classes([JWTTokenUserAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAdminToken])
 def update_info_fc_kokoc(request):
     try:
         about_fc_kokoc = AboutFcKokoc.get_instance()
-
-        # Проверка прав администратора
-        if not request.user.is_superuser:
-            return Response(
-                {"error": "У вас нет прав для изменения информации"},
-                status=status.HTTP_403_FORBIDDEN,
-            )
 
         # Проверяем, какой тип запроса (PUT или PATCH)
         if request.method == "PUT":

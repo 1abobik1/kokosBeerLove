@@ -1,14 +1,14 @@
 from django.urls import path
 
-from .views.heandlers_match.get_all_match import get_all_matches
-from .views.heandlers_match.create_match import create_match
-from .views.heandlers_match.get_match_by_id import get_match_by_id
-from .views.heandlers_match.update_match import update_match
-from .views.heandlers_match.delete_match_by_id import delete_match_by_id
-from .views.heandlers_match.get_last_three_matches import get_last_three_matches
-from .views.heandlers_match.get_upcoming_matches import get_upcoming_matches
-from .views.heandlers_match.get_last_match import get_last_match
-from .views.heandlers_match.get_next_matches import get_next_matches
+from .views.handlers_match.get_all_match import get_all_matches
+from .views.handlers_match.create_match import create_match
+from .views.handlers_match.get_match_by_id import get_match_by_id
+from .views.handlers_match.update_match import update_match
+from .views.handlers_match.delete_match_by_id import delete_match_by_id
+from .views.handlers_match.get_last_three_matches import get_last_three_matches
+from .views.handlers_match.get_upcoming_matches import get_upcoming_matches
+from .views.handlers_match.get_last_match import get_last_match
+from .views.handlers_match.get_next_matches import get_next_matches
 
 
 urlpatterns = [

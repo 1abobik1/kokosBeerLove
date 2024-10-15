@@ -3,10 +3,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.decorators import permission_classes
 
+from common.permissions import IsAdminToken
 from ...models import Product
 from ...serializers import ProductCreateSerializer, ProductSerializer
 
@@ -43,12 +42,8 @@ from ...serializers import ProductCreateSerializer, ProductSerializer
     }
 )
 @api_view(['PUT', 'PATCH'])
-@authentication_classes([JWTTokenUserAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAdminToken])
 def update_product(request, product_id):
-    # Ensure the user is an admin
-    if not request.user.is_superuser:
-        return Response({'error': 'У вас нет прав доступа для обновления товаров'}, status=status.HTTP_403_FORBIDDEN)
 
     try:
         # Find the product by ID
@@ -65,6 +60,6 @@ def update_product(request, product_id):
     if serializer.is_valid():
         product = serializer.save()  # Save the updated product
         response_serializer = ProductSerializer(product)  # Serialize the updated product
-        return Response(status=status.HTTP_200_OK)
+        return Response(response_serializer.data, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

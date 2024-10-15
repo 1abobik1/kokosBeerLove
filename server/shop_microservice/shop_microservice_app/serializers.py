@@ -18,9 +18,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductSizeSerializer(serializers.ModelSerializer):
+    # quantity was missing here, so the stock entered in the admin panel was silently dropped (always 0).
     class Meta:
         model = ProductSize
-        fields = ['size']
+        fields = ['size', 'quantity']
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -82,6 +83,7 @@ class AddToCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ['product', 'quantity', 'size']
+        extra_kwargs = {'quantity': {'min_value': 1}}
 
     def validate(self, attrs):
         # Проверяем, существует ли указанный размер для данного товара

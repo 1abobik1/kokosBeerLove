@@ -1,12 +1,10 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.decorators import (api_view, authentication_classes,
-                                       permission_classes)
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 
+from common.permissions import IsAdminToken
 from ...models import Match
 from ...serializers import MatchCreateSerializer
 
@@ -48,15 +46,8 @@ from ...serializers import MatchCreateSerializer
     },
 )
 @api_view(["PUT", "PATCH"])
-@authentication_classes([JWTTokenUserAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAdminToken])
 def update_match(request, match_id):
-    # Проверка прав администратора
-    if not request.user.is_superuser:
-        return Response(
-            {"error": "У вас нет прав для изменения матчей"},
-            status=status.HTTP_403_FORBIDDEN,
-        )
 
     try:
         match = Match.objects.get(id=match_id)

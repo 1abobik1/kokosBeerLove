@@ -1,12 +1,10 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.decorators import (api_view, authentication_classes,
-                                       permission_classes)
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 
+from common.permissions import IsAdminToken
 from ...models import NewsArticle
 
 
@@ -44,15 +42,8 @@ from ...models import NewsArticle
     },
 )
 @api_view(["POST"])
-@authentication_classes([JWTTokenUserAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAdminToken])
 def create_news_article(request):
-    # Проверка наличия is_superuser в токене
-    if not request.user.is_superuser:
-        return Response(
-            {"error": "У вас нет прав доступа для создания новостей"},
-            status=status.HTTP_403_FORBIDDEN,
-        )
 
     # Проверка на наличие всех необходимых полей
     title = request.data.get("title")

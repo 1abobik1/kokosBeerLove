@@ -1,12 +1,10 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.decorators import (api_view, authentication_classes,
-                                       permission_classes)
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 
+from common.permissions import IsAdminToken
 from ...models import Product
 
 
@@ -34,15 +32,8 @@ from ...models import Product
     },
 )
 @api_view(["DELETE"])
-@authentication_classes([JWTTokenUserAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAdminToken])
 def delete_product(request, product_id):
-    # Проверка, что пользователь администратор
-    if not request.user.is_superuser:
-        return Response(
-            {"error": "Доступ запрещен. Только администраторы могут удалять товары."},
-            status=status.HTTP_403_FORBIDDEN,
-        )
 
     try:
         product = Product.objects.get(id=product_id)
