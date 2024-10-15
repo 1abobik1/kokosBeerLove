@@ -35,6 +35,8 @@ const Basket: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, ha
     }, []);
 
     const fetchBacket = async () => {
+        // The cart belongs to a signed-in user; anonymous visitors only got 401s here.
+        if (!localStorage.getItem('token')) return;
         setIsLoading(true);
         try {
             const response = await BasketService.getAllBasket();
