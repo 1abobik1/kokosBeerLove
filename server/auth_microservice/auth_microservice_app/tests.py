@@ -117,3 +117,41 @@ class LoginLogoutTests(TestCase):
         response = self.client.get("/api/auth/profile/get_user_data/", HTTP_AUTHORIZATION=f"Bearer {access}")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(jwt.decode(access, options={"verify_signature": False})["is_superuser"])
+
+
+class CheckUploadTests(TestCase):
+    URL = "/api/auth/internal/check-upload/"
+
+    def setUp(self):
+        self.client = APIClient()
+        self.fan = CustomUser.objects.create_user("fan@example.com", "fan", PASSWORD)
+        self.admin = CustomUser.objects.create_superuser("admin@example.com", "admin", PASSWORD)
+
+    def check(self, user, method, path):
+        headers = {"HTTP_X_ORIGINAL_URI": path, "HTTP_X_ORIGINAL_METHOD": method}
+        if user is not None:
+            token = self.client.post(
+                "/api/auth/login/", {"email": user.email, "password": PASSWORD}, format="json"
+            ).data["access"]
+            headers["HTTP_AUTHORIZATION"] = f"Bearer {token}"
+        return self.client.get(self.URL, **headers).status_code
+
+    def test_anonymous_cannot_upload(self):
+        self.assertEqual(self.check(None, "PUT", "/uploads/news_images/a.png"), 401)
+
+    def test_fan_cannot_upload_content_images(self):
+        self.assertEqual(self.check(self.fan, "PUT", "/uploads/news_images/a.png"), 403)
+        self.assertEqual(self.check(self.fan, "DELETE", "/uploads/shop_images/a.png"), 403)
+
+    def test_fan_can_upload_only_own_avatar(self):
+        self.assertEqual(self.check(self.fan, "PUT", f"/uploads/user_avatar/{self.fan.id}_me.png"), 204)
+        self.assertEqual(self.check(self.fan, "PUT", f"/uploads/user_avatar/{self.admin.id}_me.png"), 403)
+        self.assertEqual(self.check(self.fan, "DELETE", f"/uploads/user_avatar/{self.fan.id}_me.png"), 403)
+
+    def test_admin_can_manage_content_images(self):
+        self.assertEqual(self.check(self.admin, "PUT", "/uploads/news_images/a.png"), 204)
+        self.assertEqual(self.check(self.admin, "DELETE", "/uploads/team_logos/a.png"), 204)
+
+    def test_path_outside_known_folders_is_rejected(self):
+        self.assertEqual(self.check(self.admin, "PUT", "/uploads/../etc/passwd"), 403)
+        self.assertEqual(self.check(self.admin, "PUT", "/uploads/other/a.png"), 403)

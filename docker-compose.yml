@@ -9,8 +9,6 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
-    volumes:
-      - uploads:/uploads
     depends_on:
       db_auth:
         condition: service_healthy
@@ -33,8 +31,6 @@ services:
     restart: unless-stopped
     ports:
       - "8001:8001"
-    volumes:
-      - uploads:/uploads
     depends_on:
       db_news:
         condition: service_healthy
@@ -59,8 +55,6 @@ services:
     restart: unless-stopped
     ports:
       - "8003:8003"
-    volumes:
-      - uploads:/uploads
     depends_on:
       db_shop:
         condition: service_healthy
@@ -85,8 +79,6 @@ services:
     restart: unless-stopped
     ports:
       - "8002:8002"
-    volumes:
-      - uploads:/uploads
     depends_on:
       db_match:
         condition: service_healthy
@@ -111,8 +103,6 @@ services:
     restart: unless-stopped
     ports:
       - "8004:8004"
-    volumes:
-      - uploads:/uploads
     depends_on:
       db_kokoc_team:
         condition: service_healthy
@@ -232,12 +222,12 @@ services:
 
   frontend:
     build:
-      context: ./client  # Указываем путь к папке с Dockerfile
-      dockerfile: Dockerfile  # Указываем имя Dockerfile
+      context: ./client
     container_name: frontend_container
+    restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "${WEB_PORT:-8080}:80"
+      - "${WEB_HTTPS_PORT:-8443}:443"
     depends_on:
       - auth_microservice
       - news_microservice
@@ -245,7 +235,9 @@ services:
       - shop_microservice
       - kokoc_team_microservice
     volumes:
+      # Uploaded images live in a volume, so they survive rebuilding the container.
       - uploads:/uploads
+      # Optional: localhost.pem and localhost-key.pem from mkcert enable HTTPS (see README).
       - ./client/certificates:/etc/nginx/ssl:ro
     networks:
       - mynetwork

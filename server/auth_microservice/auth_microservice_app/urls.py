@@ -7,6 +7,7 @@ from .views.handlers_token.refresh_token import refresh_token
 
 from .views.handlers_user.update_profile import update_profile
 from .views.handlers_user.get_user_data import get_user_data
+from .views.handlers_internal.check_upload import check_upload
 
 
 urlpatterns = [
@@ -18,4 +19,7 @@ urlpatterns = [
 
     path('profile/update/', update_profile, name='update_profile'),
     path('profile/get_user_data/', get_user_data, name='get_user_data'),
+
+    # Only for nginx auth_request; nginx does not expose /api/auth/internal/ to the outside.
+    path('internal/check-upload/', check_upload, name='check_upload'),
 ]

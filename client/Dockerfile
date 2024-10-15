@@ -1,39 +1,20 @@
-# Шаг 1: Сборка фронтенда
-FROM node:18 AS build
-
+# Stage 1: build the React app
+FROM node:22-alpine AS build
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . ./
-RUN npm run build
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY . .
+RUN npx webpack --mode production
 
-# Шаг 2: Обслуживание фронтенда через Nginx
-FROM nginx:alpine
-
-# Удаляем стандартный конфигурационный файл Nginx
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Копируем наш кастомный конфигурационный файл Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Копируем собранные файлы фронтенда из предыдущего шага
+# Stage 2: nginx serves the app, proxies /api/* to the microservices and stores uploaded images
+FROM nginx:1.28-alpine
+RUN rm /etc/nginx/conf.d/default.conf \
+    && mkdir -p /etc/nginx/snippets /etc/nginx/ssl \
+       /uploads/news_images /uploads/shop_images /uploads/player_photos /uploads/team_logos /uploads/user_avatar \
+    && chown -R nginx:nginx /uploads /var/cache/nginx
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/app.conf nginx/proxy.conf /etc/nginx/snippets/
+COPY nginx/https.conf /etc/nginx/https.conf.disabled
+COPY --chmod=755 nginx/40-enable-https.sh /docker-entrypoint.d/40-enable-https.sh
 COPY --from=build /app/dist /usr/share/nginx/html
-
-# Создаем директории для загрузки файлов
-RUN mkdir -p /uploads/news_images /uploads/shop_images /uploads/player_photos /uploads/team_logos /uploads/user_avatar
-
-# **Копируем SSL-сертификаты в контейнер**
-COPY certificates/ /etc/nginx/ssl/
-
-# Устанавливаем владельца и права доступа для кэша Nginx и директории /uploads
-RUN chown -R nginx:nginx /var/cache/nginx /uploads
-
-
-# **Устанавливаем правильные права доступа**
-RUN chmod 600 /etc/nginx/ssl/*
-
-# Открываем порт 80
 EXPOSE 80 443
-
-# Запускаем Nginx
-CMD ["nginx", "-g", "daemon off;"]

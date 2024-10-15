@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
+module.exports = (env, argv) => ({
     entry: './src/index.tsx', // Entry point for your app
     output: {
         filename: 'bundle.js',
@@ -46,6 +46,7 @@ module.exports = {
             },
         ],
     },
-    devtool: 'source-map', // Enable source maps for debugging
-    mode: 'development', // Switch to 'production' in deployment
-};
+    // `webpack --mode production` (npm run build, Dockerfile) gives a minified bundle without source maps.
+    devtool: argv.mode === 'production' ? false : 'source-map',
+    mode: argv.mode || 'development',
+});
