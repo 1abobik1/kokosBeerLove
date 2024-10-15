@@ -3,49 +3,23 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken as JWTRefreshToken
 
-from ...serializers import LogoutSerializer
+from ...models import RefreshToken as RefreshTokenModel
+from .session import REFRESH_COOKIE
 
 
 @swagger_auto_schema(
     method="post",
-    operation_description="Выход пользователя. Refresh токен передаётся в cookie.",
+    operation_description="Выход: refresh-токен из cookie удаляется из базы, после этого refresh/ его не примет.",
     tags=["authHandlers"],
-    request_body=LogoutSerializer,
-    responses={
-        204: openapi.Response("Успешный выход"),
-        400: openapi.Response("Токен не предоставлен"),
-    },
+    responses={204: openapi.Response("Успешный выход")},
 )
 @api_view(["POST"])
 def logout(request):
-    # Получаем refresh токен из cookie
-    refresh_token = request.COOKIES.get("refresh_token")
+    refresh_token = request.COOKIES.get(REFRESH_COOKIE)
+    if refresh_token:
+        RefreshTokenModel.objects.filter(token=refresh_token).delete()
 
-    if not refresh_token:
-        return Response(
-            {"error": "Refresh токен не предоставлен"},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    try:
-        # Проверка и деактивация токена
-        token = JWTRefreshToken(refresh_token)
-
-        # Если черный список активен, добавляем токен в черный список
-        try:
-            token.blacklist()
-        except AttributeError:
-            pass
-
-        # Удаляем refresh_token из cookie
-        response = Response(status=status.HTTP_204_NO_CONTENT)
-        response.delete_cookie("refresh_token")
-        return response
-
-    except Exception as e:
-        return Response(
-            {"error": f"Недействительный refresh токен: {str(e)}"},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    response = Response(status=status.HTTP_204_NO_CONTENT)
+    response.delete_cookie(REFRESH_COOKIE)
+    return response

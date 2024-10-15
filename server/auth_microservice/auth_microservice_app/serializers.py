@@ -1,3 +1,5 @@
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
 from .models import CustomUser
@@ -5,10 +7,20 @@ from .models import CustomUser
 
 class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    code = serializers.RegexField(r"^\d{6}$", write_only=True, help_text="6-значный код из письма")
 
     class Meta:
         model = CustomUser
-        fields = ["username", "email", "password"]
+        fields = ["username", "email", "password", "code"]
+
+    def validate(self, attrs):
+        # Django's password validators: length, common passwords, similarity to the email/username.
+        candidate = CustomUser(username=attrs["username"], email=attrs["email"])
+        try:
+            validate_password(attrs["password"], user=candidate)
+        except DjangoValidationError as error:
+            raise serializers.ValidationError({"password": list(error.messages)})
+        return attrs
 
     def create(self, validated_data):
         user = CustomUser(
@@ -56,10 +68,6 @@ class LoginSerializer(serializers.Serializer):
 
 
 class RefreshTokenSerializer(serializers.Serializer):
-    refresh_token = serializers.CharField()
-
-
-class LogoutSerializer(serializers.Serializer):
     refresh_token = serializers.CharField()
 
 

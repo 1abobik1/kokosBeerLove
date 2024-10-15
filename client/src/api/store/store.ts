@@ -28,7 +28,6 @@ const isUserSuperuser = (): boolean => {
 
 export default class Store {
     user = {} as IUser;
-    code = 0;
     isAuth = false;
     isSuperUser = false;
     isLoading = false;
@@ -45,12 +44,6 @@ export default class Store {
         this.user = user;
     }
 
-    setCode(code: number) {
-        this.code = code;
-    }
-    getCode() {
-        return this.code;
-    }
     setSuperUser(bool:boolean){
         this.isSuperUser = bool;
     }
@@ -74,8 +67,8 @@ export default class Store {
 
     async verify(email: string, username: string) {
         try {
-            const response = await AuthService.verify(email, username);
-            this.setCode(response.data.code);
+            // The code is only emailed; the client never sees it.
+            await AuthService.verify(email, username);
             return Promise.resolve();
         } catch (e) {
             // @ts-ignore
@@ -83,16 +76,12 @@ export default class Store {
         }
     }
 
-    async registration(username: string, email: string, password: string) {
-        try {
-            const response = await AuthService.registration(username, email, password);
-            localStorage.setItem('token', response.data.access);
-            this.setAuth(true);
-            this.setUser(response.data.user);
-        } catch (e) {
-            // @ts-ignore
-            console.log(e.response?.data?.message);
-        }
+    // Rejects with the server's error (e.g. a wrong code), so the form can show it.
+    async registration(username: string, email: string, password: string, code: string) {
+        const response = await AuthService.registration(username, email, password, code);
+        localStorage.setItem('token', response.data.access);
+        this.setAuth(true);
+        this.setSuperUser(isUserSuperuser());
     }
 
     async logout() {

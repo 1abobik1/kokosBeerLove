@@ -36,3 +36,6 @@ if EMAIL_HOST:
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     DEFAULT_FROM_EMAIL = "noreply@localhost"
+
+# Set to True when the site is served over HTTPS: the refresh cookie is then never sent over plain HTTP.
+REFRESH_COOKIE_SECURE = config("REFRESH_COOKIE_SECURE", default=False, cast=bool)

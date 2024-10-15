@@ -5,6 +5,14 @@ import {observer} from 'mobx-react-lite';
 import CloseIcon from '@mui/icons-material/Close';
 import {useNavigate} from "react-router-dom";
 
+// The server allows requesting a new code once a minute.
+const RESEND_SECONDS = 60;
+
+function codeErrorMessage(e: any): string {
+    const data = e?.response?.data;
+    return data?.code?.[0] || data?.password?.[0] || data?.error || 'Не удалось зарегистрироваться';
+}
+
 const RegistrationModal: React.FC<{ open: boolean, handleClose: () => void }> = ({open, handleClose}) => {
     const [isLogin, setIsLogin] = useState<boolean>(true);
     const [email, setEmail] = useState<string>('');
@@ -21,8 +29,8 @@ const RegistrationModal: React.FC<{ open: boolean, handleClose: () => void }> = 
         code?: string
     }>({});
     const [loginError, setLoginError] = useState<boolean>(false); // Ошибка входа
-    const [codeError, setCodeError] = useState<boolean>(false); // Ошибка кода подтверждения
-    const [resendTimer, setResendTimer] = useState<number>(10); // Таймер для повторной отправки кода
+    const [codeError, setCodeError] = useState<string>(''); // Ошибка кода подтверждения от сервера
+    const [resendTimer, setResendTimer] = useState<number>(RESEND_SECONDS); // Таймер для повторной отправки кода
     const [successMessage, setSuccessMessage] = useState<boolean>(false); // Успешная верификация
     const {store} = useContext(Context);
     const navigate = useNavigate();
@@ -31,7 +39,7 @@ const RegistrationModal: React.FC<{ open: boolean, handleClose: () => void }> = 
         if (!open) {
             setStep(1);
             setIsLogin(true); // Сброс формы на вход
-            setCodeError(false); // Сброс ошибки кода
+            setCodeError(''); // Сброс ошибки кода
             setSuccessMessage(false); // Сброс сообщения об успешной верификации
         }
     }, [open]);
@@ -96,6 +104,7 @@ const RegistrationModal: React.FC<{ open: boolean, handleClose: () => void }> = 
                 .then(() => {
                     // Если верификация прошла успешно
                     setStep(2); // Переход на шаг подтверждения email
+                    setResendTimer(RESEND_SECONDS);
                 })
                 .catch((e: any) => {
                     // Обработка ошибки 400 (пользователь уже существует)
@@ -129,21 +138,20 @@ const RegistrationModal: React.FC<{ open: boolean, handleClose: () => void }> = 
     };
 
     const handleConfirmEmail = () => {
-        const confirmationCode = Number(code.join(''));
-        const codeFromStore = store.getCode();
-        if (confirmationCode === codeFromStore) {
-            store.registration(name, email, password);
-            setSuccessMessage(true); // Показываем успешное сообщение
-            setTimeout(() => {
-                handleClose(); // Закрываем окно через 3 секунды после успешной верификации
-            }, 3000);
-        } else {
-            setCodeError(true); // Устанавливаем ошибку, если код неверен
-        }
+        // The server checks the code: it is never sent to the browser.
+        store.registration(name, email, password, code.join(''))
+            .then(() => {
+                setCodeError('');
+                setSuccessMessage(true); // Показываем успешное сообщение
+                setTimeout(() => {
+                    handleClose(); // Закрываем окно через 3 секунды после успешной регистрации
+                }, 3000);
+            })
+            .catch((e: any) => setCodeError(codeErrorMessage(e)));
     };
 
     const handleResendCode = () => {
-        setResendTimer(10); // Сбрасываем таймер
+        setResendTimer(RESEND_SECONDS); // Сбрасываем таймер
         store.verify(email, name); // Повторно отправляем код
     };
 
@@ -340,7 +348,7 @@ const RegistrationModal: React.FC<{ open: boolean, handleClose: () => void }> = 
 
                         {codeError && (
                             <Typography sx={{color: 'red', mt: 1}}>
-                                Неверный код подтверждения
+                                {codeError}
                             </Typography>
                         )}
 
@@ -377,7 +385,7 @@ const RegistrationModal: React.FC<{ open: boolean, handleClose: () => void }> = 
                             onClick={handleResendCode}
                             disabled={resendTimer > 0}
                         >
-                            {resendTimer === 0 ? 'Отправить заново' : 'Отправить заново через ${resendTimer} секунд'}
+                            {resendTimer === 0 ? 'Отправить заново' : `Отправить заново через ${resendTimer} секунд`}
                         </Button>
                     </>
                 )}

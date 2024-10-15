@@ -1,7 +1,6 @@
 import {authApi} from "../http/auth";
 
 import {AuthResponse} from "../models/response/AuthResponse";
-import {CodeResponse} from "../models/response/CodeResponse";
 import {ProfileEdit} from "../models/ProfileEdit";
 
 export default class AuthService {
@@ -10,9 +9,10 @@ export default class AuthService {
         return authApi.post<AuthResponse>('/login/', {email, password})
     }
 
-    static async registration(username: string, email: string, password: string) {
+    // code: the 6-digit code from the email sent by verify(); the server checks it.
+    static async registration(username: string, email: string, password: string, code: string) {
         // @ts-ignore
-        return authApi.post<AuthResponse>('/signup/', {username, email, password, first_name: username})
+        return authApi.post<AuthResponse>('/signup/', {username, email, password, code})
     }
 
     static async logout(): Promise<unknown> {
@@ -21,7 +21,7 @@ export default class AuthService {
 
     static async verify(email: string, username: string) {
         // @ts-ignore
-        return authApi.post<CodeResponse>('/verify-email/', {email, username})
+        return authApi.post('/verify-email/', {email, username})
     }
 
     static async getUserData() {

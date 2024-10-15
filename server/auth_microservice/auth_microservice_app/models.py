@@ -1,3 +1,7 @@
+import hashlib
+import hmac
+from datetime import timedelta
+
 from django.conf import settings
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
@@ -64,6 +68,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class RefreshToken(models.Model):
+    """Issued refresh tokens. A token absent from this table is rejected by refresh/, so logout just deletes it."""
+
+    LIFETIME = timedelta(days=60)
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE)
@@ -80,9 +88,27 @@ class RefreshToken(models.Model):
 
 
 class VerificationCode(models.Model):
-    email = models.EmailField()
-    code = models.CharField(max_length=6)
+    """A sign-up code sent by email. Only its SHA-256 is stored; it expires and allows a few attempts."""
+
+    TTL = timedelta(minutes=10)
+    RESEND_INTERVAL = timedelta(seconds=60)
+    MAX_ATTEMPTS = 5
+
+    email = models.EmailField(db_index=True)
+    code_hash = models.CharField(max_length=64)
+    attempts = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @staticmethod
+    def hash_code(code):
+        return hashlib.sha256(code.encode()).hexdigest()
+
+    def matches(self, code):
+        return hmac.compare_digest(self.code_hash, self.hash_code(code))
+
+    @property
+    def is_expired(self):
+        return timezone.now() > self.created_at + self.TTL
 
     def __str__(self):
         return f"Verification code for {self.email}"
