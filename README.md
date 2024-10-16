@@ -1,147 +1,192 @@
-# Разработка веб-платформы для ФК и болельщиков футбола 
+# ФК «Кокос» — платформа для клуба и болельщиков
 
-Этот проект реализован с использованием микросервисной архитектуры. Фронтенд выполнен на React с использованием TypeScript, а бэкенд — на Django. Проект обслуживается через Nginx с Redis для кэширования, а контейнеры оркестрируются с помощью Docker Compose.
+Веб-платформа футбольного клуба «Кокос»: новости, матчи с видеозаписями, состав команды, магазин атрибутики с корзиной
+и админка для контента. Сделана командой из четырёх человек на хакатоне в октябре 2024: React + TypeScript на клиенте,
+пять микросервисов на Django REST Framework, всё запускается одной командой через Docker Compose.
 
-## Стек технологий
+![React](https://img.shields.io/badge/React-18-61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.9-3178C6)
+![Django](https://img.shields.io/badge/Django-4.2-092E20)
+![DRF](https://img.shields.io/badge/DRF-3.15-A30000)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)
+![Redis](https://img.shields.io/badge/Redis-7-DC382D)
+![Docker](https://img.shields.io/badge/Docker-compose-2496ED)
 
-- **Frontend:** React + TypeScript
-- **Backend:** Python + Django + Django REST Framework
-- **Proxy:** Nginx
-- **Кэширование:** Redis
-- **Контейнеризация:** Docker Compose
+<!-- demo: перетащите GIF в редактор README на GitHub — он загрузится в user-attachments, а не в репозиторий -->
 
-## Требования
+## Возможности
 
-Перед запуском убедитесь, что на вашей машине установлены следующие зависимости:
+**Для болельщиков**
+- Новости клуба с поиском, календарь и результаты матчей с видеозаписями, состав команды и статистика игроков.
+- Магазин: товары по размерам, корзина с учётом остатков на складе.
+- Регистрация с подтверждением email по коду, личный кабинет с аватаром.
 
-- Docker
-- Docker Compose
-- mkcert (для создания локальных SSL-сертификатов)
-- Python 3.8+
-- PostgreSQL
-- Node.js (для сборки фронтенда)
+**Для администратора** (`/admin`)
+- Создание и редактирование новостей, матчей, игроков, товаров и информации о клубе.
+- Загрузка изображений прямо из админки; изменения видны на сайте сразу.
 
-## Установка и запуск проекта
+## Архитектура
 
-### 1. Клонирование репозитория
+```mermaid
+flowchart LR
+    B[Браузер] --> N[nginx<br/>React-приложение, /uploads]
+    N -- /api/auth --> A[auth :8000]
+    N -- /api/news --> NS[news :8001]
+    N -- /api/match --> M[match :8002]
+    N -- /api/shop --> S[shop :8003]
+    N -- /api/kokoc_team --> T[kokoc_team :8004]
+    N -. "auth_request<br/>PUT/DELETE /uploads" .-> A
+    A --> DA[(PostgreSQL)]
+    NS --> DN[(PostgreSQL)]
+    M --> DM[(PostgreSQL)]
+    S --> DS[(PostgreSQL)]
+    T --> DT[(PostgreSQL)]
+    NS & M & S & T --> R[(Redis<br/>кэш)]
+```
 
-Склонируйте репозиторий:
+- **nginx** отдаёт собранный клиент, проксирует `/api/*` в нужный сервис и хранит загруженные изображения в томе `uploads`.
+- **auth** — пользователи и JWT. Access-токен (30 минут) хранится в клиенте, refresh-токен (60 дней) — в httpOnly cookie
+  и в базе, поэтому выход из аккаунта действительно завершает сессию.
+- Остальные сервисы не ходят в auth: они проверяют подпись JWT общим ключом `JWT_SIGNING_KEY` и берут из токена
+  `user_id` и признак администратора `is_superuser`.
+- У каждого сервиса своя база PostgreSQL. Списки кэшируются в Redis на 20 минут, а после любого изменения данных
+  кэш сервиса сбрасывается.
+- **Загрузка изображений**: клиент кладёт файл методом `PUT` в `/uploads/<папка>/…`, nginx перед сохранением спрашивает
+  auth-сервис (`auth_request`). Администратор может загружать во все папки, пользователь — только свой аватар; принимаются
+  только изображения до 10 МБ.
+
+## Быстрый старт
+
+Нужны Docker и Docker Compose.
 
 ```bash
-git clone https://github.com/Juryxa/kokosBeerLove
+cp .env.example .env
+docker compose up --build
 ```
-### 2. Настройка переменных окружения
 
-Создайте файл .env в корне проекта. Пример, со скрытыми паролями .env для микросервисов:
-```env
-SECRET_KEY_AUTH=***hidden***
-SECRET_KEY_NEWS=***hidden***
-SECRET_KEY_SHOP=***hidden***
-SECRET_KEY_MATCH=***hidden***
-SECRET_KEY_KOKOC_TEAM=***hidden***
-SECRET_KEY_FUN_HUB=***hidden***
+Сайт откроется на http://localhost:8080 (порт меняется переменной `WEB_PORT`).
 
-# auth settings db
-DATABASE_NAME_AUTH=kokocDB_auth_microservice
-DATABASE_USER_AUTH=postgres
-DATABASE_PASSWORD_AUTH=***hidden***
-DATABASE_HOST_AUTH=localhost
-DATABASE_PORT_AUTH=5432
+Создать администратора:
 
-# news settings db
-DATABASE_NAME_NEWS=kokocDB_news_microservice
-DATABASE_USER_NEWS=postgres
-DATABASE_PASSWORD_NEWS=***hidden***
-DATABASE_HOST_NEWS=localhost
-DATABASE_PORT_NEWS=5432
-
-# shop settings db
-DATABASE_NAME_SHOP=kokocDB_shop_microservice
-DATABASE_USER_SHOP=postgres
-DATABASE_PASSWORD_SHOP=***hidden***
-DATABASE_HOST_SHOP=localhost
-DATABASE_PORT_SHOP=5432
-
-# match settings db
-DATABASE_NAME_MATCH=kokocDB_match_microservice
-DATABASE_USER_MATCH=postgres
-DATABASE_PASSWORD_MATCH=***hidden***
-DATABASE_HOST_MATCH=localhost
-DATABASE_PORT_MATCH=5432
-
-# kokoc_team settings db
-DATABASE_NAME_KOKOC_TEAM=kokocDB_kokoc_team_microservice
-DATABASE_USER_KOKOC_TEAM=postgres
-DATABASE_PASSWORD_KOKOC_TEAM=***hidden***
-DATABASE_HOST_KOKOC_TEAM=localhost
-DATABASE_PORT_KOKOC_TEAM=5432
-
-# fun_hub settings db
-DATABASE_NAME_FUN_HUB=kokocDB_kokoc_team_microservice
-DATABASE_USER_FUN_HUB=postgres
-DATABASE_PASSWORD_FUN_HUB=***hidden***
-DATABASE_HOST_FUN_HUB=localhost
-DATABASE_PORT_FUN_HUB=5432
-
-# JWT settings
-JWT_SIGNING_KEY=***hidden***
-
-# Email settings
-EMAIL_HOST_AUTH=smtp.mail.ru
-EMAIL_PORT_AUTH=587
-EMAIL_USE_TLS_AUTH=True
-EMAIL_HOST_USER_AUTH=ПочтаДляОтправкиКодаПодтверждения@mail.ru
-EMAIL_HOST_PASSWORD_AUTH=***hidden***
-```
-### 3. Установка SSL-сертификатов (локальная разработка)
-Используйте mkcert, чтобы создать локальные SSL-сертификаты:
 ```bash
-mkcert -install
-mkcert localhost
-```
-Переместите сертификаты в папку certificates/:
-```bash
-mkdir certificates
-mv localhost.pem certificates/
-mv localhost-key.pem certificates/
-```
-### 4. Сборка и запуск проекта с помощью Docker Compose
-Для сборки и запуска проекта выполните:
-```bash
-docker-compose up --build
-```
-### 5. Создание администратора
-Чтобы создать администратора для аутентификационного микросервиса, выполните:
-```bash
-docker-compose exec auth_microservice python manage.py createsuperuser
-```
-### 6. Доступ к проекту
-После успешного запуска проекта фронтенд будет доступен по адресу:
-```bash
-https://localhost
-```
-API-документация (Swagger) для микросервисов доступна по следующему пути (port от 8000 до 8004):  
-```bash
-https://localhost:port/swagger/
+docker compose exec auth_microservice python manage.py createsuperuser
 ```
 
-Либо можно скачать файлы:
+После входа администратор попадает в `/admin`.
 
-[Скачать Swagger файл для auth_microservice](https://github.com/Juryxa/kokosBeerLove/blob/main/auth_microservice)  
-[Скачать Swagger файл для kokoc_team_microservice](https://github.com/Juryxa/kokosBeerLove/blob/main/kokoc_team_microservice)  
-[Скачать Swagger файл для match_microservice](https://github.com/Juryxa/kokosBeerLove/blob/main/match_microservice)  
-[Скачать Swagger файл для news_microservice](https://github.com/Juryxa/kokosBeerLove/blob/main/news_microservice)  
-[Скачать Swagger файл для shop_microservice](https://github.com/Juryxa/kokosBeerLove/blob/main/shop_microservice)
+**Код подтверждения при регистрации.** Если в `.env` не задан SMTP (`EMAIL_HOST_AUTH`), письма не отправляются,
+а печатаются в лог auth-сервиса:
 
-## Сервисы
-### Frontend (React + TypeScript)
-Фронтенд построен с использованием React и TypeScript. Он собирается с помощью npm и обслуживается через Nginx. Вся статика хранится в контейнере Nginx.
-### Backend (Django + Django REST Framework)
-Backend реализован с использованием Django и Django REST Framework. Для авторизации используется JWT, а Redis отвечает за кэширование данных.
-### Redis
-Redis используется для кэширования данных и может быть интегрирован в Django через настройки CACHES.
+```bash
+docker compose logs auth_microservice | grep "код подтверждения"
+```
 
-## Примечания по безопасности
-- **SSL:** Используйте mkcert только для локальной разработки. Для production-среды рекомендуется использовать Let's Encrypt или другие сертифицированные поставщики SSL.
-- **CORS:**  Настройки CORS должны быть жестко контролированы в production. В файле .env установите соответствующие домены для CORS_ALLOWED_ORIGINS.
-- **Среда выполнения:** Не забудьте отключить DEBUG в production.
+Для настоящей отправки укажите `EMAIL_HOST_AUTH`, `EMAIL_HOST_USER_AUTH` и `EMAIL_HOST_PASSWORD_AUTH`
+(например, пароль приложения mail.ru или Яндекса).
+
+**HTTPS (необязательно).** Положите в `client/certificates/` сертификаты `localhost.pem` и `localhost-key.pem`
+(например, из [mkcert](https://github.com/FiloSottile/mkcert): `mkcert -install && mkcert localhost`) и перезапустите
+`frontend` — nginx включит HTTPS на порту `WEB_HTTPS_PORT` (по умолчанию https://localhost:8443).
+Для работы через HTTPS установите `REFRESH_COOKIE_SECURE=True`.
+
+## Сервисы и API
+
+| Сервис | Порт | Префикс | Что делает |
+|---|---|---|---|
+| auth_microservice | 8000 | `/api/auth/` | `verify-email/`, `signup/`, `login/`, `refresh/`, `logout/`, `profile/get_user_data/`, `profile/update/` |
+| news_microservice | 8001 | `/api/news/` | `get_all/`, `<id>/`, `create/`, `<id>/update/`, `<id>/delete/` |
+| match_microservice | 8002 | `/api/match/` | `get_all/`, `get_by_id/<id>/`, `get_last/`, `get_last_three/`, `get_next/`, `get_upcoming/`, `create/`, `update/<id>/`, `delete/<id>/` |
+| shop_microservice | 8003 | `/api/shop/` | `get_all/`, `<id>/`, `create_product/`, `update_product/<id>/`, `delete_product/<id>/`, `add_to_cart/`, `get_all_items_from_cart/`, `remove_item_from_cart/<id>/` |
+| kokoc_team_microservice | 8004 | `/api/kokoc_team/` | `get_all_players/`, `get_player/<id>/`, `create_player/`, `update_player/<id>/`, `delete_player/<id>/`, `get_info_club/`, `info_club/update/` |
+
+Создание, изменение и удаление — только для администратора (`Authorization: Bearer <access>`), чтение открыто.
+Интерактивная документация Swagger у каждого сервиса: `http://localhost:<порт>/swagger/`.
+В [`docs/api/`](docs/api) лежат выгрузки схем на момент хакатона.
+
+**Регистрация** проходит в два шага:
+
+```http
+POST /api/auth/verify-email/   {"email": "fan@example.com", "username": "fan"}
+POST /api/auth/signup/         {"email": "fan@example.com", "username": "fan", "password": "…", "code": "123456"}
+```
+
+Код приходит только на почту, действует 10 минут и даёт 5 попыток; повторно запросить его можно раз в минуту.
+
+## Переменные окружения
+
+Все переменные с комментариями — в [`.env.example`](.env.example). Главные:
+
+| Переменная | Назначение |
+|---|---|
+| `SECRET_KEY_<СЕРВИС>` | Django `SECRET_KEY` каждого сервиса |
+| `JWT_SIGNING_KEY` | общий ключ подписи JWT для всех сервисов |
+| `DATABASE_{NAME,USER,PASSWORD,HOST,PORT}_<СЕРВИС>` | подключение к базе сервиса |
+| `EMAIL_*_AUTH` | SMTP для писем с кодом; пусто — письма в лог |
+| `DJANGO_DEBUG` | режим отладки Django, по умолчанию выключен |
+| `WEB_PORT`, `WEB_HTTPS_PORT` | порты сайта на машине |
+| `REFRESH_COOKIE_SECURE` | отправлять refresh-cookie только по HTTPS |
+
+## Тесты
+
+```bash
+docker compose exec auth_microservice python manage.py test auth_microservice_app
+docker compose exec news_microservice python manage.py test news_microservice_app
+docker compose exec shop_microservice python manage.py test shop_microservice_app
+docker compose exec match_microservice python manage.py test match_microservice_app
+docker compose exec kokoc_team_microservice python manage.py test kokoc_team_microservice_app
+```
+
+Проверяются регистрация с кодом, вход и выход, права на загрузку файлов, доступ администратора,
+сброс кэша после изменений и остатки в корзине.
+
+## Структура проекта
+
+```
+client/                       React + TypeScript (webpack), MobX, MUI
+  nginx/                      конфигурация nginx: маршруты, прокси, загрузка файлов, HTTPS
+  src/api/                    HTTP-клиенты, сервисы и store (MobX)
+  src/pages/                  страницы сайта и админки
+server/
+  Dockerfile                  общий образ для всех сервисов (gunicorn)
+  requirements.txt            зависимости всех сервисов
+  common/                     общие настройки Django, проверка прав администратора, сброс кэша
+  auth_microservice/          пользователи, JWT, коды подтверждения, проверка загрузок
+  news_microservice/          новости
+  match_microservice/         матчи
+  shop_microservice/          товары, размеры, корзина
+  kokoc_team_microservice/    игроки и информация о клубе
+docs/api/                     выгрузки Swagger
+docker-compose.yml            5 сервисов, 5 баз PostgreSQL, Redis, nginx
+```
+
+## Разработка без Docker
+
+Сервис можно запустить локально, если PostgreSQL и Redis доступны на машине (`DATABASE_HOST_*` и `REDIS_URL` в `.env`):
+
+```bash
+python -m venv .venv && . .venv/bin/activate
+pip install -r server/requirements.txt
+cd server/news_microservice
+python manage.py migrate && python manage.py runserver 8001
+```
+
+Клиент собирается в `client/dist/`:
+
+```bash
+cd client && npm ci && npm run build
+```
+
+## Ограничения
+
+- Оформление заказа не реализовано: корзина есть, оплаты и заказов нет.
+- Клиентский бандл большой (около 7 МБ): картинки и библиотеки не разбиты на части.
+- Access-токен хранится в `localStorage`.
+- Каждый сервис — отдельная база и отдельный контейнер: для такого масштаба это избыточно, но так задумана
+  микросервисная архитектура хакатона.
+
+## Авторы
+
+- **Дмитрий** ([@1abobik1](https://github.com/1abobik1)) — бэкенд
+- **Максим** ([@Conopi](https://github.com/Conopi)) — бэкенд
+- **Вячеслав** ([@Juryxa](https://github.com/Juryxa)) — фронтенд
+- **Михаил** ([@mannco1](https://github.com/mannco1)) — фронтенд
