@@ -33,7 +33,7 @@ const RequireAuthAdmin: FC<any> = ({children}) => {
     }
 
     if (isAuthorized === false) {
-        return <Navigate to="/"/>;
+        return <Navigate to="/" />;
     }
 
     return children;

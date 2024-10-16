@@ -1,7 +1,7 @@
 import React from 'react';
-import data from "./boss.json"
+import data from './boss.json';
 import {Avatar, Card, CardContent, Typography} from '@mui/material';
-import './BigBosses.css'
+import './BigBosses.css';
 
 interface BossType {
     id: number;
@@ -20,13 +20,14 @@ const BigBosses = () => {
 
     return (
         <div className="boss-container">
-
-            <h1 style={{color: "white", fontSize: "30px"}}>Представители клуба</h1>
+            <h1 style={{color: 'white', fontSize: '30px'}}>Представители клуба</h1>
 
             <div className="boss-content">
                 {bosses.map((item) => (
                     <Card key={item.id} className="boss-card">
-                        <Avatar className="boss-avatar" alt={item.name}>{initials(item.name)}</Avatar>
+                        <Avatar className="boss-avatar" alt={item.name}>
+                            {initials(item.name)}
+                        </Avatar>
                         <CardContent>
                             <Typography variant="h6">{item.name}</Typography>
                             <Typography variant="body2">{item.role}</Typography>

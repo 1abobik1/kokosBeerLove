@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
     Modal,
     Box,
@@ -8,15 +8,15 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemSecondaryAction
+    ListItemSecondaryAction,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import BasketService from '../../api/services/BasketService';
 import img from '../../images/T-shirt Mockup.png';
 
-interface BasketType  {
+interface BasketType {
     id: number;
     product_name: number;
     description: string;
@@ -25,7 +25,7 @@ interface BasketType  {
     quantity: number;
 }
 
-const Basket: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, handleClose }) => {
+const Basket: React.FC<{open: boolean; handleClose: () => void}> = ({open, handleClose}) => {
     const [isBuying, setBuying] = useState<BasketType[]>([]);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +62,7 @@ const Basket: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, ha
                     .map((item) => {
                         if (item.id === productId && item.size === size) {
                             if (item.quantity > 1) {
-                                return { ...item, quantity: item.quantity - 1 };
+                                return {...item, quantity: item.quantity - 1};
                             }
                             return undefined;
                         }
@@ -88,7 +88,7 @@ const Basket: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, ha
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
                     borderRadius: '12px',
                     padding: '20px',
-                    width: { xs: '90%', sm: '80%', md: '60%', lg: '500px' },
+                    width: {xs: '90%', sm: '80%', md: '60%', lg: '500px'},
                     textAlign: 'center',
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                     position: 'absolute',
@@ -111,7 +111,7 @@ const Basket: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, ha
                     <CloseIcon />
                 </IconButton>
 
-                <Typography variant="h5" sx={{ mb: 2, color: '#E62526', fontSize: { xs: '24px', md: '30px' } }}>
+                <Typography variant="h5" sx={{mb: 2, color: '#E62526', fontSize: {xs: '24px', md: '30px'}}}>
                     Корзина
                 </Typography>
 
@@ -119,8 +119,12 @@ const Basket: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, ha
                     <>
                         <List>
                             {isBuying.map((item, index) => (
-                                <ListItem key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <img src={item.url_images[0] || img} alt="error" style={{ width: '50px', marginRight: '15px' }} />
+                                <ListItem key={index} sx={{display: 'flex', alignItems: 'center'}}>
+                                    <img
+                                        src={item.url_images[0] || img}
+                                        alt="error"
+                                        style={{width: '50px', marginRight: '15px'}}
+                                    />
                                     <ListItemText
                                         primary={`Название: ${item.product_name}`}
                                         secondary={
@@ -137,7 +141,7 @@ const Basket: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, ha
                                     />
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" onClick={() => handleRemoveItem(item.id, item.size)}>
-                                            <DeleteIcon sx={{ color: '#E62526' }} />
+                                            <DeleteIcon sx={{color: '#E62526'}} />
                                         </IconButton>
                                     </ListItemSecondaryAction>
                                 </ListItem>
@@ -159,9 +163,7 @@ const Basket: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, ha
                         </Button>
                     </>
                 ) : (
-                    <Typography sx={{ mt: 2, color: 'gray' }}>
-                        Ваша корзина пуста.
-                    </Typography>
+                    <Typography sx={{mt: 2, color: 'gray'}}>Ваша корзина пуста.</Typography>
                 )}
             </Box>
         </Modal>

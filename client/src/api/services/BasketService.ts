@@ -1,11 +1,11 @@
-import {basketApi} from "../http/basket";
-import {ProductToAdd} from "../models/ProductToAdd";
-import { ShopResponse } from "../models/response/ShopResponse";
+import {basketApi} from '../http/basket';
+import {ProductToAdd} from '../models/ProductToAdd';
+import {ShopResponse} from '../models/response/ShopResponse';
 
-export default class BasketService{
-    static async addToBasket(product: number, quantity: number, size:string) {
+export default class BasketService {
+    static async addToBasket(product: number, quantity: number, size: string) {
         // @ts-ignore
-        return basketApi.post<ProductToAdd>('/add_to_cart/', {product, quantity,size});
+        return basketApi.post<ProductToAdd>('/add_to_cart/', {product, quantity, size});
     }
     static async getAllBasket() {
         // @ts-ignore
@@ -14,9 +14,7 @@ export default class BasketService{
 
     static async removeItemFromBasket(productId: number, size: string) {
         return basketApi.delete(`/remove_item_from_cart/${productId}/`, {
-            params: { size },
+            params: {size},
         });
     }
-    
-
 }

@@ -1,31 +1,25 @@
-.container-shop-details{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  min-height: 100vh;
+.container-shop-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 100vh;
 }
 
-.content-shop-details{
- 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  
-    
+.content-shop-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
-
 
 .image-navigation-buttons {
     display: flex;
     justify-content: center;
     padding-top: auto;
-    
-    
 }
 .color-option,
 .size-option {
@@ -35,7 +29,9 @@
     margin-right: 5px;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s, transform 0.2s;
+    transition:
+        background-color 0.3s,
+        transform 0.2s;
 }
 
 .color-option.selected,
@@ -61,7 +57,8 @@
     background-color: #cc0000; /* Темный красный цвет при нажатии */
 }
 
-.prev-image-button, .next-image-button {
+.prev-image-button,
+.next-image-button {
     background-color: #ff3535; /* Красный цвет для кнопок */
     color: white;
     border: none;
@@ -71,21 +68,23 @@
     border-radius: 5px;
     width: 120px; /* Фиксированная ширина для обеих кнопок */
     text-align: center; /* Выравнивание текста по центру */
-    transition: background-color 0.3s, transform 0.2s; /* Плавный переход для эффекта */
+    transition:
+        background-color 0.3s,
+        transform 0.2s; /* Плавный переход для эффекта */
 }
 
-.prev-image-button:hover, .next-image-button:hover {
+.prev-image-button:hover,
+.next-image-button:hover {
     background-color: #cc0000; /* Темно-красный цвет при наведении */
     transform: scale(1.05); /* Легкое увеличение кнопки при наведении */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень при наведении */
 }
 
-.prev-image-button:active, .next-image-button:active {
+.prev-image-button:active,
+.next-image-button:active {
     transform: scale(0.95); /* Легкое уменьшение кнопки при нажатии */
     background-color: #b30000; /* Еще более темный красный цвет при нажатии */
 }
-
-
 
 .product-card {
     display: flex;
@@ -95,165 +94,172 @@
     border-radius: 10px;
     padding: 20px;
     background-color: white;
-  }
-  
-  .product-image {
+}
+
+.product-image {
     flex: 1;
     padding: 20px;
     margin: 20px;
     border: 1px solid #eaeaea;
     width: 100%;
     height: 60vh;
-  }
-  
-  .product-image img {
+}
+
+.product-image img {
     width: 100%; /* Изображение займет всю ширину контейнера */
     height: 80%; /* Изображение займет всю высоту контейнера */
     object-fit: cover; /* Обрезает изображение по краям, сохраняя пропорции */
 }
-  
-  .product-info {
+
+.product-info {
     flex: 2;
-  }
-  
-  .product-name {
+}
+
+.product-name {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
-  }
-  
-  .product-rating {
+}
+
+.product-rating {
     margin-bottom: 10px;
     color: #ffb400;
-  }
-  
-  .product-price {
+}
+
+.product-price {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-  }
-  
-  .new-price {
+}
+
+.new-price {
     font-size: 24px;
     font-weight: bold;
     margin-right: 10px;
-  }
-  
-  .old-price {
+}
+
+.old-price {
     font-size: 18px;
     color: #999;
     text-decoration: line-through;
-  }
-  
-  .product-colors,
-  .product-sizes {
+}
+
+.product-colors,
+.product-sizes {
     margin-bottom: 10px;
-  }
-  
-  .color-option,
-  .size-option {
+}
+
+.color-option,
+.size-option {
     background-color: #f5f5f5;
     border: 1px solid #ddd;
     padding: 5px 10px;
     margin-right: 5px;
     cursor: pointer;
-  }
-  
-  .add-to-cart,
-  .buy-now {
-      background-color: #ff3535; /* Красный цвет для кнопок */
-      color: white;
-      padding: 10px 20px; /* Padding */
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-right: 10px; /* Отступ между кнопками */
-      /* Фиксированная ширина для обеих кнопок */
-      text-align: center; /* Выравнивание текста по центру */
-      transition: background-color 0.3s, transform 0.2s; /* Плавный переход для эффекта */
-  }
-  
-  .add-to-cart:hover,
-  .buy-now:hover {
-      background-color: #cc0000; /* Темно-красный цвет при наведении */
-      transform: scale(1.05); /* Легкое увеличение кнопки при наведении */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень при наведении */
-  }
-  
-  .add-to-cart:active,
-  .buy-now:active {
-      transform: scale(0.95); /* Легкое уменьшение кнопки при нажатии */
-      background-color: #b30000; /* Еще более темный красный цвет при нажатии */
-  }
-  
+}
 
-  @media (max-width: 1200px) {
+.add-to-cart,
+.buy-now {
+    background-color: #ff3535; /* Красный цвет для кнопок */
+    color: white;
+    padding: 10px 20px; /* Padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px; /* Отступ между кнопками */
+    /* Фиксированная ширина для обеих кнопок */
+    text-align: center; /* Выравнивание текста по центру */
+    transition:
+        background-color 0.3s,
+        transform 0.2s; /* Плавный переход для эффекта */
+}
+
+.add-to-cart:hover,
+.buy-now:hover {
+    background-color: #cc0000; /* Темно-красный цвет при наведении */
+    transform: scale(1.05); /* Легкое увеличение кнопки при наведении */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень при наведении */
+}
+
+.add-to-cart:active,
+.buy-now:active {
+    transform: scale(0.95); /* Легкое уменьшение кнопки при нажатии */
+    background-color: #b30000; /* Еще более темный красный цвет при нажатии */
+}
+
+@media (max-width: 1200px) {
     .content-shop-details {
-      flex-direction: column;
+        flex-direction: column;
     }
-  
+
     .product-card {
-      flex-direction: column;
-      width: 80%;
-      height: auto;
+        flex-direction: column;
+        width: 80%;
+        height: auto;
     }
-  
-    .product-image, .product-info {
-      width: 100%;
-      height: auto;
-      padding: 10px;
-      margin: 10px 0;
+
+    .product-image,
+    .product-info {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        margin: 10px 0;
     }
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .product-name {
-      font-size: 20px;
+        font-size: 20px;
     }
-  
-    .new-price, .old-price {
-      font-size: 18px;
+
+    .new-price,
+    .old-price {
+        font-size: 18px;
     }
-  
+
     .product-image img {
-      height: auto;
+        height: auto;
     }
-  
-    .prev-image-button, .next-image-button {
-      width: 100px; /* Уменьшаем ширину кнопок на мобильных устройствах */
+
+    .prev-image-button,
+    .next-image-button {
+        width: 100px; /* Уменьшаем ширину кнопок на мобильных устройствах */
     }
-  
-    .add-to-cart, .buy-now {
-      width: 100%;
-      margin: 5px 0; /* Разделяем кнопки на мобильных устройствах */
+
+    .add-to-cart,
+    .buy-now {
+        width: 100%;
+        margin: 5px 0; /* Разделяем кнопки на мобильных устройствах */
     }
-  }
-  
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
     .product-card {
-      width: 95%;
-      padding: 10px;
+        width: 95%;
+        padding: 10px;
     }
-  
+
     .product-name {
-      font-size: 18px;
+        font-size: 18px;
     }
-  
+
     .product-image img {
-      height: auto;
-      object-fit: contain;
+        height: auto;
+        object-fit: contain;
     }
-  
+
     .product-price {
-      flex-direction: column;
+        flex-direction: column;
     }
-  
-    .new-price, .old-price {
-      font-size: 16px;
+
+    .new-price,
+    .old-price {
+        font-size: 16px;
     }
-  
-    .color-option, .size-option {
-      padding: 5px 8px;
-      margin: 3px 0;
+
+    .color-option,
+    .size-option {
+        padding: 5px 8px;
+        margin: 3px 0;
     }
-  }
+}

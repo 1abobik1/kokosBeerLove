@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './ShopPreview.css';
-import { Link } from 'react-router-dom';
-import { ShopResponse } from '../../api/models/response/ShopResponse';
+import {Link} from 'react-router-dom';
+import {ShopResponse} from '../../api/models/response/ShopResponse';
 import ShopService from '../../api/services/ShopService';
 import ShopCard from '../Shop_and_Main_PageComponents/ShopCard';
 
@@ -31,10 +31,12 @@ const ShopPreview = () => {
             <div className="shop-content">
                 <div className="title-links">
                     <h1>Магазин</h1>
-                    <Link to="/shop" className="shop-link">Переходите в официальный магазин команды</Link>
+                    <Link to="/shop" className="shop-link">
+                        Переходите в официальный магазин команды
+                    </Link>
                 </div>
                 <div className="card-container">
-                    {isLoading && <div className='loading-spinner'></div>}
+                    {isLoading && <div className="loading-spinner"></div>}
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     {shopData.slice(0, 3).map((item) => (
                         <ShopCard

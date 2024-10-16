@@ -8,16 +8,17 @@
     padding: 20px 0; /* Отступы сверху и снизу */
 }
 
-.card, .stats-card {
+.card,
+.stats-card {
     position: relative;
     border-radius: 8px;
     margin: 15px;
     text-align: center;
     width: 364px; /* Фиксированная ширина для карточки */
     height: 248px; /* Фиксированная высота для карточки */
-    background-color: #FFFFFF;
+    background-color: #ffffff;
 
-    background-image: url("../../images/Subtract.png");
+    background-image: url('../../images/Subtract.png');
     background-size: cover; /* Рамка адаптируется по ширине */
     background-repeat: no-repeat;
     background-position: center;
@@ -27,7 +28,8 @@
     justify-content: space-between; /* Выравнивание содержимого */
 }
 
-.labelMatchPreview, .statsMatchPreview {
+.labelMatchPreview,
+.statsMatchPreview {
     position: absolute;
     top: -15px; /* Впадина для заголовка */
     width: 100%;
@@ -46,7 +48,7 @@
 }
 
 h4 {
-    color: #E62526;
+    color: #e62526;
     margin: 0 2px;
     font-size: 24px; /* Уменьшен размер заголовка */
 }
@@ -82,21 +84,20 @@ p {
     flex-direction: column;
     align-items: flex-start;
 }
-.stats-card-info{
+.stats-card-info {
     display: flex;
     width: 100%;
     justify-content: space-around;
     margin-bottom: 2px;
-
 }
-.stats-card-info p{
+.stats-card-info p {
     font-weight: bolder;
     font-size: 16px;
     text-align: left;
     min-width: 120px;
     margin-right: 20px;
 }
-.stats-card-info span{
+.stats-card-info span {
     font-weight: bolder;
     font-size: 30px;
     text-align: right;
@@ -104,8 +105,8 @@ p {
 
 /* Адаптивность */
 @media screen and (max-width: 480px) {
-
-    .card, .stats-card {
+    .card,
+    .stats-card {
         width: 80%; /* Адаптивная ширина для карточки */
         height: auto; /* Высота будет изменяться в зависимости от содержимого */
         max-width: 310px; /* Ограничиваем максимальную ширину для маленьких экранов */
@@ -115,7 +116,8 @@ p {
         border: 1px solid black;
     }
 
-    .labelMatchPreview, .statsMatchPreview {
+    .labelMatchPreview,
+    .statsMatchPreview {
         font-size: 15px;
         top: 0;
         position: static;

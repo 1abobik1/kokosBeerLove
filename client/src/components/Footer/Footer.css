@@ -1,5 +1,5 @@
 .footer {
-    background: #E02A26;
+    background: #e02a26;
     color: white;
     padding: 5px 0 20px 0;
     text-align: center;
@@ -10,64 +10,57 @@
     position: static;
     margin-top: auto;
     z-index: 1;
-  }
+}
 
-  .footer-content {
+.footer-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width:  1291px;
+    max-width: 1291px;
     width: 100%;
-  }
+}
 
-
-  .social-icons i {
+.social-icons i {
     /* margin: 0 10px; */
     font-size: 24px;
-  }
+}
 
-  .footer p {
+.footer p {
     font-weight: bold;
     text-transform: uppercase;
-  }
-
-
+}
 
 .contacts_koks-img {
-
-  transition: transform 0.3s ease; /* Анимация при масштабировании */
+    transition: transform 0.3s ease; /* Анимация при масштабировании */
 }
 
 .contacts_koks-img:hover {
-  transform: scale(1.2); /* Увеличение изображения в 1.5 раза */
+    transform: scale(1.2); /* Увеличение изображения в 1.5 раза */
 }
 
 .contacts_koks-img {
-  max-width: 100%; /* Изображение адаптируется по ширине контейнера */
-  height: auto; /* Высота автоматически подстраивается */
+    max-width: 100%; /* Изображение адаптируется по ширине контейнера */
+    height: auto; /* Высота автоматически подстраивается */
 }
-
-
 
 .icon_section img {
     margin-right: 5px;
     height: 19px;
-
 }
 .icon_section a {
     text-decoration: none;
     color: white;
 }
 @media screen and (max-width: 500px) {
-    .footer{
+    .footer {
         font-size: 13px;
     }
 }
 @media screen and (max-width: 400px) {
-    .footer{
+    .footer {
         font-size: 9px;
     }
-    .icon_section button{
+    .icon_section button {
         padding: 5px;
     }
 }

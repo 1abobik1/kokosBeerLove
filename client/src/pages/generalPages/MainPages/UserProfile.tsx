@@ -102,7 +102,7 @@ const UserProfile: React.FC = () => {
                 );
                 setSuccessMessage('Профиль успешно обновлен!');
                 setErrorMessage(null);
-                setIsEditing(false);  // Отключаем режим редактирования
+                setIsEditing(false); // Отключаем режим редактирования
             } catch (error) {
                 setErrorMessage('Произошла ошибка при сохранении данных.');
                 setSuccessMessage(null);
@@ -113,7 +113,7 @@ const UserProfile: React.FC = () => {
     return (
         <>
             <Box display="flex" flexDirection="column" minHeight="100vh">
-                <Header/>
+                <Header />
                 <Box flexGrow={1} display="flex" justifyContent="center" alignItems="flex-start" p={2}>
                     <Box display="flex" flexDirection={{xs: 'column', md: 'row'}} gap={2} width="90%" maxWidth="1200px">
                         <Box flex="1" display="flex" justifyContent="center">
@@ -123,14 +123,22 @@ const UserProfile: React.FC = () => {
                                     src={image || user?.avatar_url}
                                     alt="Profile Image"
                                 />
-                                <Button style={{margin: '15px'}} variant="outlined" color="error"
-                                        onClick={handleImageEditing}>
+                                <Button
+                                    style={{margin: '15px'}}
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={handleImageEditing}
+                                >
                                     {showInput ? 'Сохранить' : 'Загрузить аватар'}
                                 </Button>
 
                                 {showInput && (
-                                    <input style={{margin: '15px'}} type="file" onChange={handleFileChange}
-                                           accept="image/*"/>
+                                    <input
+                                        style={{margin: '15px'}}
+                                        type="file"
+                                        onChange={handleFileChange}
+                                        accept="image/*"
+                                    />
                                 )}
 
                                 {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
@@ -148,7 +156,11 @@ const UserProfile: React.FC = () => {
                         <Box flex="2" display="flex" justifyContent="center">
                             <Card sx={{padding: 2, backgroundColor: '#ffffff', width: '100%'}}>
                                 <CardContent>
-                                    {(['first_name', 'last_name', 'phone_number', 'telegram'] as Array<keyof ProfileEdit>).map((field) => (
+                                    {(
+                                        ['first_name', 'last_name', 'phone_number', 'telegram'] as Array<
+                                            keyof ProfileEdit
+                                        >
+                                    ).map((field) => (
                                         <Box key={field} mb={2}>
                                             <Typography variant="h6" gutterBottom>
                                                 {fieldNames[field]}
@@ -167,8 +179,11 @@ const UserProfile: React.FC = () => {
                                             )}
                                         </Box>
                                     ))}
-                                    <Button variant="contained" color="error"
-                                            onClick={isEditing ? handleSave : () => setIsEditing(true)}>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={isEditing ? handleSave : () => setIsEditing(true)}
+                                    >
                                         {isEditing ? 'Сохранить' : 'Редактировать'}
                                     </Button>
                                 </CardContent>
@@ -176,7 +191,7 @@ const UserProfile: React.FC = () => {
                         </Box>
                     </Box>
                 </Box>
-                <Footer/>
+                <Footer />
             </Box>
         </>
     );

@@ -9,7 +9,7 @@
     padding: 8px;
     max-width: 150px; /* Максимальная ширина для каждой ячейки */
     overflow: hidden; /* Скрываем переполненный текст */
-    
+
     text-overflow: ellipsis; /* Добавляем многоточие при обрезке текста */
 }
 
@@ -115,7 +115,6 @@ iframe {
     }
 }
 
-
 .TraslateVk {
     width: 100%; /* Занимает всю ширину */
 }
@@ -124,7 +123,6 @@ iframe {
     display: flex;
     flex-wrap: wrap; /* Позволяет элементам переноситься на следующую строку */
     justify-content: center; /* Центрируем видео по горизонтали */
-
 }
 
 .ephir-1 {
@@ -161,7 +159,8 @@ iframe {
     border-collapse: collapse;
 }
 
-.video-info th, .video-info td {
+.video-info th,
+.video-info td {
     border: 1px solid #ddd;
     padding: 8px;
 }
@@ -176,7 +175,9 @@ iframe {
     font-weight: bold;
 }
 
-.video-league, .video-score, .video-location {
+.video-league,
+.video-score,
+.video-location {
     font-size: 14px;
     margin: 0;
     padding: 5px;
@@ -186,11 +187,10 @@ iframe {
     text-overflow: ellipsis;
 }
 
-
 .show-more-button {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #E62526;
+    background-color: #e62526;
     color: white;
     border: none;
     border-radius: 5px;
@@ -208,13 +208,12 @@ iframe {
     display: none;
 }
 
-
 .button {
     width: 100%;
     color: white;
     font-size: 15px;
     border: none;
-    background-color: #E62526;
+    background-color: #e62526;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     padding: 10px;
@@ -227,7 +226,7 @@ iframe {
     transform: scale(0.98); /* Уменьшение кнопки при наведении */
 }
 
-.no-more-videos-message{
+.no-more-videos-message {
     text-align: center;
     color: red;
     padding: 15px;

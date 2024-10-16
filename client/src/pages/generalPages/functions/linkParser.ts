@@ -1,6 +1,6 @@
-export function extractNumbersFromUrl(url: string): { firstNumber: string, secondNumber: string } | null {
-    let firstNumber = "";
-    let secondNumber = "";
+export function extractNumbersFromUrl(url: string): {firstNumber: string; secondNumber: string} | null {
+    let firstNumber = '';
+    let secondNumber = '';
     let isFirstNumberFound = false;
     let isCollectingSecondNumber = false;
 
@@ -25,7 +25,7 @@ export function extractNumbersFromUrl(url: string): { firstNumber: string, secon
     }
 
     if (firstNumber && secondNumber) {
-        return { firstNumber, secondNumber };
+        return {firstNumber, secondNumber};
     }
 
     return null; // Если числа не найдены

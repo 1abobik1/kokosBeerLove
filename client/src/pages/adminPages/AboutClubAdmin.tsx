@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import AboutService from '../../api/services/AboutService';
-import { AboutResponse } from '../../api/models/response/AboutResponse';
+import {AboutResponse} from '../../api/models/response/AboutResponse';
 import './AboutClubAdmin.css';
 
 const AboutClubAdmin = () => {
@@ -38,13 +38,7 @@ const AboutClubAdmin = () => {
         }
 
         try {
-            await AboutService.updatePartAbout(
-                gamesPlayed,
-                wins,
-                goals,
-                tournaments,
-                aboutText || '',
-            );
+            await AboutService.updatePartAbout(gamesPlayed, wins, goals, tournaments, aboutText || '');
             setSuccessMessage('Информация о клубе успешно обновлена.');
             setErrorMessage(null); // Сброс ошибки
             setIsEditing(false); // Завершение редактирования
@@ -117,11 +111,21 @@ const AboutClubAdmin = () => {
                 </>
             ) : (
                 <div className="club-info">
-                    <p><strong>Количество игр сыграно:</strong> {gamesPlayed}</p>
-                    <p><strong>Победы:</strong> {wins}</p>
-                    <p><strong>Забито голов:</strong> {goals}</p>
-                    <p><strong>Турниры:</strong> {tournaments}</p>
-                    <p><strong>Информация о клубе:</strong> {aboutText}</p>
+                    <p>
+                        <strong>Количество игр сыграно:</strong> {gamesPlayed}
+                    </p>
+                    <p>
+                        <strong>Победы:</strong> {wins}
+                    </p>
+                    <p>
+                        <strong>Забито голов:</strong> {goals}
+                    </p>
+                    <p>
+                        <strong>Турниры:</strong> {tournaments}
+                    </p>
+                    <p>
+                        <strong>Информация о клубе:</strong> {aboutText}
+                    </p>
                 </div>
             )}
 

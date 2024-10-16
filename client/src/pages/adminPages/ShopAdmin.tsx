@@ -11,7 +11,7 @@ const ShopAdmin = () => {
     const [price, setPrice] = useState<string>('');
     const [discount, setDiscount] = useState<string>('0'); // Поле для скидки как строка
     const [category, setCategory] = useState<'Одежда' | 'Аксессуары' | ''>(''); // Поле для выбора категории
-    const [sizes, setSizes] = useState<{ size: 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL', quantity: number }[]>([]); // Размеры и количество
+    const [sizes, setSizes] = useState<{size: 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'; quantity: number}[]>([]); // Размеры и количество
     const [images, setImages] = useState<File[]>([]);
     const [existingImages, setExistingImages] = useState<string[]>([]);
     const [productList, setProductList] = useState<ShopResponse[]>([]);
@@ -90,7 +90,7 @@ const ShopAdmin = () => {
 
             if (images.length > 0) {
                 const uploadedImageUrls = await Promise.all(
-                    images.map((image) => uploadImage(image, setSuccessMessage, setErrorMessage, 'shop_images'))
+                    images.map((image) => uploadImage(image, setSuccessMessage, setErrorMessage, 'shop_images')),
                 );
                 imageUrls = [...imageUrls, ...uploadedImageUrls];
             }
@@ -107,11 +107,19 @@ const ShopAdmin = () => {
                     const isNameChanged = originalProduct.name !== productName;
                     const isDescriptionChanged = originalProduct.description !== description;
                     const isPriceChanged = originalProduct.price !== parsedPrice;
-                    const isImageChanged = images.length > 0 || existingImages.length !== originalProduct.url_images.length;
+                    const isImageChanged =
+                        images.length > 0 || existingImages.length !== originalProduct.url_images.length;
                     const isCategoryChanged = originalProduct.category !== category;
                     const isSizesChanged = JSON.stringify(originalProduct.sizes) !== JSON.stringify(sizes);
 
-                    if (isNameChanged || isDescriptionChanged || isPriceChanged || isImageChanged || isCategoryChanged || isSizesChanged) {
+                    if (
+                        isNameChanged ||
+                        isDescriptionChanged ||
+                        isPriceChanged ||
+                        isImageChanged ||
+                        isCategoryChanged ||
+                        isSizesChanged
+                    ) {
                         await ShopService.updatePartProduct(
                             editProductId,
                             productName,
@@ -120,7 +128,7 @@ const ShopAdmin = () => {
                             parsedDiscount,
                             category,
                             imageUrls.length > 0 ? imageUrls : originalProduct.url_images,
-                            sizes
+                            sizes,
                         );
                         setSuccessMessage('Товар обновлен.');
                     } else {
@@ -128,7 +136,15 @@ const ShopAdmin = () => {
                     }
                 }
             } else {
-                await ShopService.createProduct(productName, description, parsedPrice, parsedDiscount, category, imageUrls, sizes);
+                await ShopService.createProduct(
+                    productName,
+                    description,
+                    parsedPrice,
+                    parsedDiscount,
+                    category,
+                    imageUrls,
+                    sizes,
+                );
                 setSuccessMessage('Товар добавлен.');
             }
 
@@ -222,17 +238,19 @@ const ShopAdmin = () => {
                     </button>
                 </div>
             ))}
-            <button className="shop-admin-button" onClick={addSize}>Добавить размер</button>
+            <button className="shop-admin-button" onClick={addSize}>
+                Добавить размер
+            </button>
 
             <label className="shop-admin-file-label">
                 Загрузить изображения:
-                <input type="file" multiple accept="image/*" onChange={handleFileChange}/>
+                <input type="file" multiple accept="image/*" onChange={handleFileChange} />
             </label>
 
             {existingImages.length > 0 && (
                 <div className="shop-admin-images-container">
                     {existingImages.map((image, index) => (
-                        <img key={index} src={image} alt={`Продукт ${index}`} className="shop-admin-image"/>
+                        <img key={index} src={image} alt={`Продукт ${index}`} className="shop-admin-image" />
                     ))}
                 </div>
             )}

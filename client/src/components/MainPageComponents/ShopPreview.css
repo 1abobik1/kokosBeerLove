@@ -1,4 +1,4 @@
-.shop-container{
+.shop-container {
     background-image: url('../../images/image14.png');
     width: 100%;
     min-height: 934px;
@@ -10,41 +10,38 @@
     position: relative;
     background-color: #000;
     z-index: 1;
-
 }
 
 .shop-container::before {
     content: '';
-  position: absolute; /* Позиционируем над фоном */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  z-index: 0;
-  }
+    position: absolute; /* Позиционируем над фоном */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    z-index: 0;
+}
 
-
-
-
-  .shop-content {
+.shop-content {
     width: 80vw;
-
 
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-  .title-links a {
+.title-links a {
     color: black; /* Черный цвет текста */
-    transition: color 0.3s, text-decoration 0.3s;
+    transition:
+        color 0.3s,
+        text-decoration 0.3s;
     text-decoration: underline; /* Плавный переход цвета и подчеркивания */
 }
 
 .title-links a:hover {
-    color: #4D4D4D;
+    color: #4d4d4d;
     text-decoration: none;
 }
 
@@ -56,21 +53,20 @@
     z-index: 1;
 }
 
-  .title-links {
+.title-links {
     margin-bottom: 100px;
     z-index: 1;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-  }
+}
 
-  .card-container {
+.card-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 50px; /* расстояние между карточками */
-
-  }
+}
 
 .loading-spinner {
     width: 50px;

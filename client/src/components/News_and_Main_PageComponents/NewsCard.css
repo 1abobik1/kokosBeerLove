@@ -8,17 +8,15 @@
     flex-basis: 45%;
     max-width: 100%;
     flex-direction: row;
-
 }
 .news-title {
     font-size: 18px;
-    color: #E62526; /* Цвет заголовка */
+    color: #e62526; /* Цвет заголовка */
     margin-bottom: 10px;
     word-wrap: break-word;
     overflow: hidden; /* Скрывает переполнение */
     white-space: nowrap; /* Запретить перенос строк для заголовка */
     text-overflow: ellipsis; /* Добавляет многоточие для длинного текста */
-
 }
 .news-text {
     font-size: 14px;
@@ -37,7 +35,6 @@
     display: flex;
     flex-direction: row;
     max-width: 100%;
-
 }
 
 .news-card:hover {
@@ -102,6 +99,6 @@
 }
 
 .news-card:hover {
-    color: #E62526; /* Меняет цвет при наведении, можно настроить по вашему желанию */
+    color: #e62526; /* Меняет цвет при наведении, можно настроить по вашему желанию */
     transform: scale(1.05); /* Эффект увеличения при наведении */
 }

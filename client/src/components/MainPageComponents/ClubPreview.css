@@ -2,13 +2,11 @@
     background-color: #ffffff;
     padding: 20px 0 20px 0; /* Добавляем отступ сверху */
 
-
     margin: 0 auto; /* Центрируем контейнер */
     width: 80%;
 }
 
 .image-container {
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,7 +24,6 @@
 }
 
 .text-overlay {
-
     top: -50px; /* Сдвиг блока вверх */
     background-color: white;
     padding: 20px;
@@ -36,7 +33,6 @@
     margin-right: -20px; /* Перекрываем картинку правым краем */
     z-index: 1; /* Текст поверх изображения */
 }
-
 
 .text-overlay h2 {
     margin: 0;

@@ -2,17 +2,15 @@ import React, {useEffect, useState} from 'react';
 
 import {Link, useNavigate} from 'react-router-dom';
 
-
 import {TextField, List, ListItem, Box} from '@mui/material';
 
 import {ListItemButton, ListItemText} from '@mui/material';
 import './News.css';
 import Header from '../../../components/HeaderAndItsComponents/Header';
 import Footer from '../../../components/Footer/Footer';
-import {NewsResponse} from "../../../api/models/response/NewsResponse";
-import NewsService from "../../../api/services/NewsService";
-import NewsCard from "../../../components/News_and_Main_PageComponents/NewsCard";
-
+import {NewsResponse} from '../../../api/models/response/NewsResponse';
+import NewsService from '../../../api/services/NewsService';
+import NewsCard from '../../../components/News_and_Main_PageComponents/NewsCard';
 
 const News = () => {
     const [newsData, setNewsData] = useState<NewsResponse[]>([]);
@@ -43,9 +41,7 @@ const News = () => {
         setSearchQuery(query);
 
         // Фильтруем новости по заголовку на основе запроса
-        const filteredSuggestions = newsData.filter((news) =>
-            news.title.toLowerCase().includes(query.toLowerCase())
-        );
+        const filteredSuggestions = newsData.filter((news) => news.title.toLowerCase().includes(query.toLowerCase()));
         setSuggestions(filteredSuggestions);
     };
 
@@ -55,7 +51,7 @@ const News = () => {
 
     return (
         <div className="container-news">
-            <Header/>
+            <Header />
             <div className="news-section">
                 <h1>НОВОСТИ</h1>
 
@@ -92,13 +88,12 @@ const News = () => {
                                     onClick={() => handleSuggestionClick(news.id)}
                                     sx={{width: '200px'}}
                                 >
-                                    <ListItemText primary={news.title}/>
+                                    <ListItemText primary={news.title} />
                                 </ListItemButton>
                             ))}
                         </List>
                     )}
                 </Box>
-
 
                 <div className="news-cards-container">
                     {isLoading && <div className="loading-spinner"></div>}
@@ -115,7 +110,7 @@ const News = () => {
                     ))}
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };

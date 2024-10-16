@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import NewsService from '../../api/services/NewsService'
-import { NewsResponse } from '../../api/models/response/NewsResponse';
-import {uploadImage} from "./functions/uploadImage";
+import React, {useState, useEffect} from 'react';
+import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
+import NewsService from '../../api/services/NewsService';
+import {NewsResponse} from '../../api/models/response/NewsResponse';
+import {uploadImage} from './functions/uploadImage';
 import './NewsAdmin.css';
 
 const NewsAdmin = () => {
@@ -48,7 +48,6 @@ const NewsAdmin = () => {
         }
 
         try {
-
             if (isEditing && editNewsId !== null) {
                 if (originalNews) {
                     const isTitleChanged = originalNews.title !== title;
@@ -129,9 +128,14 @@ const NewsAdmin = () => {
             />
             <label className="news-admin-file-label">
                 Загрузить изображение
-                <input type="file" accept="image/png, image/jpeg" className="news-admin-file-input" onChange={handleFileChange}/>
+                <input
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    className="news-admin-file-input"
+                    onChange={handleFileChange}
+                />
             </label>
-            {image && <img src={image} alt="Новость" className="match-image"/>}
+            {image && <img src={image} alt="Новость" className="match-image" />}
 
             <button className="news-admin-button" onClick={handleAddOrUpdateNews}>
                 {isEditing ? 'Сохранить изменения' : 'Добавить новость'}
@@ -146,14 +150,14 @@ const NewsAdmin = () => {
                                 <div className="news-admin-list-item-content">
                                     <h4>{news.title}</h4>
                                     <p>{news.text}</p>
-                                    <img src={news.image_url} alt={news.title} className="news-admin-image"/>
+                                    <img src={news.image_url} alt={news.title} className="news-admin-image" />
                                 </div>
                                 <div className="news-admin-list-item-actions">
                                     <button onClick={() => handleEditNews(news.id)} className="edit-button">
-                                        <EditIcon/>
+                                        <EditIcon />
                                     </button>
                                     <button onClick={() => handleDeleteNews(news.id)} className="delete-button">
-                                        <DeleteIcon/>
+                                        <DeleteIcon />
                                     </button>
                                 </div>
                             </li>
@@ -163,7 +167,6 @@ const NewsAdmin = () => {
                     )}
                 </ul>
             </div>
-
         </div>
     );
 };

@@ -1,9 +1,9 @@
-import {IUser} from "../models/IUser";
-import {makeAutoObservable} from "mobx";
-import AuthService from "../services/AuthService";
+import {IUser} from '../models/IUser';
+import {makeAutoObservable} from 'mobx';
+import AuthService from '../services/AuthService';
 import axios from 'axios';
-import {AuthResponse} from "../models/response/AuthResponse";
-import {AUTH_API_URL} from "../http/url/urls";
+import {AuthResponse} from '../models/response/AuthResponse';
+import {AUTH_API_URL} from '../http/url/urls';
 import {jwtDecode} from 'jwt-decode';
 
 interface JwtPayload {
@@ -44,7 +44,7 @@ export default class Store {
         this.user = user;
     }
 
-    setSuperUser(bool:boolean){
+    setSuperUser(bool: boolean) {
         this.isSuperUser = bool;
     }
 
@@ -102,8 +102,8 @@ export default class Store {
                 `${AUTH_API_URL}/refresh/`,
                 {},
                 {
-                    withCredentials: true
-                }
+                    withCredentials: true,
+                },
             );
             localStorage.setItem('token', response.data.access);
             this.setAuth(true);
@@ -123,5 +123,4 @@ export default class Store {
             this.setLoading(false);
         }
     }
-
 }

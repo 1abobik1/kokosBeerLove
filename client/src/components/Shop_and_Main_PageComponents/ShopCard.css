@@ -1,22 +1,18 @@
-.shop-card{
+.shop-card {
     height: 587px;
     width: 376px;
-    
 }
 
-
-.redline{
+.redline {
     z-index: 0;
-    
 }
 
-
-.shopcard-preview-text{
+.shopcard-preview-text {
     z-index: 1;
     margin-bottom: 15px;
 }
 
-.shopcard-img{
+.shopcard-img {
     z-index: 1;
 }
 
@@ -41,7 +37,6 @@
 }
 
 .redline {
-    
     bottom: 0;
     z-index: 0; /* Задаем уровень наложения, чтобы линия была позади остальных элементов */
     width: 100%; /* Делаем линию по ширине контейнера */
@@ -77,7 +72,7 @@
 }
 
 .shop-order-button {
-    background: linear-gradient(90deg, #E62526, #801515); /* Красный цвет кнопки */
+    background: linear-gradient(90deg, #e62526, #801515); /* Красный цвет кнопки */
     color: white;
     font-weight: bold;
     text-transform: none;
@@ -85,14 +80,13 @@
     padding: 8px 20px;
     transition: background-color 0.3s ease;
     width: 299px;
-    
 }
 
 .shop-order-button:hover {
     background-color: #b71c1c; /* Более тёмный красный при наведении */
 }
 
-.img-red-line{
+.img-red-line {
     width: 100px;
     height: 100px;
 }

@@ -6,7 +6,7 @@
     background-color: #f5f5f5;
     border-radius: 10px;
 }
-.shop-admin-container h4{
+.shop-admin-container h4 {
     color: black;
 }
 
@@ -16,7 +16,8 @@
     margin-bottom: 20px;
 }
 
-.shop-admin-input, .shop-admin-textarea {
+.shop-admin-input,
+.shop-admin-textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -48,7 +49,7 @@
 .shop-admin-button {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 5px;
@@ -130,7 +131,6 @@
     flex: 1;
 }
 
-
 .product-admin-list-item h4 {
     margin: 0;
     font-size: 18px;
@@ -156,21 +156,23 @@
 }
 
 /* Кнопки редактирования и удаления */
-.edit-button, .delete-button {
+.edit-button,
+.delete-button {
     background-color: transparent;
     border: none;
     cursor: pointer;
 }
 
 .edit-button svg {
-    fill: #4CAF50;
+    fill: #4caf50;
 }
 
 .delete-button svg {
     fill: #ff3333;
 }
 
-.error-message, .success-message {
+.error-message,
+.success-message {
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
@@ -184,7 +186,7 @@
 
 .success-message {
     background-color: #ddffdd;
-    color: #4CAF50;
+    color: #4caf50;
 }
 
 /* Адаптивность */

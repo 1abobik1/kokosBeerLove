@@ -3,30 +3,27 @@
     justify-content: center;
     align-items: center;
     min-height: 50vh; /* Центрируем спиннер в середине экрана */
-  }
-  
-  .loading-spinner {
+}
+
+.loading-spinner {
     border: 4px solid rgba(0, 0, 0, 0.1);
-    border-left-color: #E62526; /* Красный цвет для индикатора */
+    border-left-color: #e62526; /* Красный цвет для индикатора */
     border-radius: 50%;
     width: 40px;
     height: 40px;
     animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
+}
+
+@keyframes spin {
     0% {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     100% {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  
+}
 
-
-  
-  .match-table-container {
+.match-table-container {
     margin: 20px auto;
     max-width: 600px;
     border: 1px solid #ddd;
@@ -41,7 +38,8 @@
     border-collapse: collapse;
 }
 
-.match-table th, .match-table td {
+.match-table th,
+.match-table td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;

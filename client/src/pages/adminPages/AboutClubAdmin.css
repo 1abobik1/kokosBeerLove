@@ -13,7 +13,8 @@
     margin-bottom: 20px;
 }
 
-.about-club-admin-input, .about-club-admin-textarea {
+.about-club-admin-input,
+.about-club-admin-textarea {
     width: 98%;
     padding: 10px;
     margin-bottom: 15px;
@@ -25,7 +26,7 @@
 .about-club-admin-button {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 5px;
@@ -37,7 +38,8 @@
     background-color: #45a049;
 }
 
-.error-message, .success-message {
+.error-message,
+.success-message {
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
@@ -52,14 +54,20 @@
 
 .success-message {
     background-color: #ddffdd;
-    color: #4CAF50;
+    color: #4caf50;
     animation: fadeOut 4s forwards;
 }
 
 @keyframes fadeOut {
-    0% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 /* Textarea expands only downward */

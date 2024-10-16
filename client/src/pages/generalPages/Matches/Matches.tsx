@@ -6,7 +6,7 @@ import CreateVideoFrame from '../../../components/MatchesPageComponents/CreateVi
 import {Link, useNavigate} from 'react-router-dom';
 import {IVideo} from '../../../api/models/IVideo';
 import MatchService from '../../../api/services/MatchService';
-import imglogo from '../../../images/logoteam1.png'
+import imglogo from '../../../images/logoteam1.png';
 import {
     Box,
     FormControl,
@@ -16,9 +16,8 @@ import {
     ListItemText,
     MenuItem,
     Select,
-    TextField
+    TextField,
 } from '@mui/material';
-
 
 const Matches: FC = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -30,18 +29,15 @@ const Matches: FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestions, setSuggestions] = useState<IVideo[]>([]);
 
-
     const [selectedMonth, setSelectedMonth] = useState<number | ''>('');
     const [selectedYear, setSelectedYear] = useState<number | ''>('');
     const [selectedDay, setSelectedDay] = useState<number | ''>('');
     const [hasMoreVideos, setHasMoreVideos] = useState(true);
 
-
     // useEffect(() => {
     //     setMatchesData();
     //     setTranslationData();
     // }, []);
-
 
     useEffect(() => {
         fetchMathes(videosToShow);
@@ -64,7 +60,6 @@ const Matches: FC = () => {
         }
     };
 
-
     useEffect(() => {
         fetchTranslation();
     }, []);
@@ -73,7 +68,7 @@ const Matches: FC = () => {
         setIsLoading(true);
         try {
             const response = await MatchService.getLastOne();
-            setTranslationData(response.data)
+            setTranslationData(response.data);
         } catch (error) {
             setErrorMessage('Ошибка загрузки последнего матча');
         } finally {
@@ -81,13 +76,11 @@ const Matches: FC = () => {
         }
     };
 
-
     const handleShowMore = () => {
         const newLimit = videosToShow + 4; // Увеличиваем количество видео для показа
         setVideosToShow(newLimit); // Обновляем состояние для отображаемого количества видео
         fetchMathes(newLimit); // Вызываем функцию для загрузки дополнительных видео
     };
-
 
     useEffect(() => {
         const iframes = document.querySelectorAll('iframe');
@@ -111,13 +104,10 @@ const Matches: FC = () => {
         };
     }, [translationData, mathesData]);
 
-
     const navigate = useNavigate();
 
     const handleCardClick = (id: number) => {
-
         navigate(`/match/${id}`);
-
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,7 +115,7 @@ const Matches: FC = () => {
         setSearchQuery(query);
         if (query) {
             const filteredMatches = mathesData.filter((match) =>
-                match.match_date?.toLowerCase().includes(query.toLowerCase())
+                match.match_date?.toLowerCase().includes(query.toLowerCase()),
             );
             setSuggestions(filteredMatches);
         } else {
@@ -133,8 +123,7 @@ const Matches: FC = () => {
         }
     };
 
-
-// Функция для фильтрации матчей по выбранным месяцу, году и дню
+    // Функция для фильтрации матчей по выбранным месяцу, году и дню
     const filterMatchesByDate = () => {
         return mathesData.filter((match) => {
             if (!match.match_date) return false; // Проверка на наличие даты
@@ -157,12 +146,24 @@ const Matches: FC = () => {
 
     const filteredMatches = filterMatchesByDate();
 
-
     // Function to format the date as "дд - месяц словами - гггг"
     function formatDate(dateString: string): string {
         const date = new Date(dateString);
         const day = date.getDate().toString().padStart(2, '0'); // Get day of the month
-        const monthNames = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
+        const monthNames = [
+            'Января',
+            'Февраля',
+            'Марта',
+            'Апреля',
+            'Мая',
+            'Июня',
+            'Июля',
+            'Августа',
+            'Сентября',
+            'Октября',
+            'Ноября',
+            'Декабря',
+        ];
         const month = monthNames[date.getMonth()]; // Get month name
         const year = date.getFullYear(); // Get full year
 
@@ -177,7 +178,7 @@ const Matches: FC = () => {
 
     return (
         <div>
-            <Header/>
+            <Header />
             <div className="container">
                 <h1 className={`hiddenToo ${isLoading ? 'hidden' : ''}`}>Матчи</h1>
                 <Box mb={3}>
@@ -213,13 +214,12 @@ const Matches: FC = () => {
                                     onClick={() => handleCardClick(match.id)}
                                     sx={{width: '200px'}}
                                 >
-                                    <ListItemText primary={match.match_date}/>
+                                    <ListItemText primary={match.match_date} />
                                 </ListItemButton>
                             ))}
                         </List>
                     )}
                 </Box>
-
 
                 <div className="content">
                     {isLoading && <div className="loading-spinner"></div>}
@@ -236,14 +236,11 @@ const Matches: FC = () => {
                         />
                     </div>
 
-                    <div className='low-content-matches'>
+                    <div className="low-content-matches">
                         <div className={`hiddenToo ${isLoading ? 'hidden' : ''}`}>
                             <h2 className={`hiddenToo ${isLoading ? 'hidden' : ''}`}>Записи матчей</h2>
 
-
                             <Box mb={3} display="flex" gap={2} flexWrap="wrap" flexDirection="row">
-
-
                                 <FormControl variant="outlined" sx={{minWidth: 120}}>
                                     <InputLabel>Год</InputLabel>
                                     <Select
@@ -254,13 +251,17 @@ const Matches: FC = () => {
                                         <MenuItem value="">
                                             <em>Все</em>
                                         </MenuItem>
-                                        {Array.from(new Set(mathesData.map((match) => {
-                                            if (match.match_date) {
-                                                return new Date(match.match_date).getFullYear();
-                                            }
-                                            return undefined;
-                                        })))
-                                            .filter(year => year !== undefined)
+                                        {Array.from(
+                                            new Set(
+                                                mathesData.map((match) => {
+                                                    if (match.match_date) {
+                                                        return new Date(match.match_date).getFullYear();
+                                                    }
+                                                    return undefined;
+                                                }),
+                                            ),
+                                        )
+                                            .filter((year) => year !== undefined)
                                             .map((year) => (
                                                 <MenuItem key={year} value={year}>
                                                     {year}
@@ -297,9 +298,11 @@ const Matches: FC = () => {
                                         </MenuItem>
                                         {Array.from(new Array(31)).map((_, index) => {
                                             const day = index + 1;
-                                            const isValidDay = selectedMonth && selectedYear
-                                                ? new Date(selectedYear, selectedMonth - 1, day).getMonth() + 1 === selectedMonth
-                                                : true;
+                                            const isValidDay =
+                                                selectedMonth && selectedYear
+                                                    ? new Date(selectedYear, selectedMonth - 1, day).getMonth() + 1 ===
+                                                      selectedMonth
+                                                    : true;
                                             return isValidDay ? (
                                                 <MenuItem key={day} value={day}>
                                                     {day}
@@ -309,50 +312,53 @@ const Matches: FC = () => {
                                     </Select>
                                 </FormControl>
                             </Box>
-
                         </div>
                         <div className="lastephire">
-
                             {filteredMatches.slice(0, videosToShow).map((video) => (
                                 <div className="ephir-1" key={video.id} onClick={() => handleCardClick(video.id)}>
                                     <div className={`videosVk ${isLoading ? 'hidden' : ''}`}>
-
                                         <CreateVideoFrame
                                             video_url={video.video_url}
                                             hd={video?.hd}
                                             width={720}
                                             height={1280}
-
                                         />
                                         <div className="video-info">
                                             <table className="match-table">
                                                 <tbody>
-                                                <tr>
-                                                    <th>Дата</th>
-                                                    <td>{formatDate(video.match_date)}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Время</th>
-                                                    <td>{formatTime(video.match_time)}</td>
-                                                </tr>
+                                                    <tr>
+                                                        <th>Дата</th>
+                                                        <td>{formatDate(video.match_date)}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Время</th>
+                                                        <td>{formatTime(video.match_time)}</td>
+                                                    </tr>
 
-                                                <tr>
-                                                    <th>Счет</th>
-                                                    <td>
-                                                        <img src={imglogo} alt="Home Team Logo" className='team-logo'/>
-                                                        {video.score_home} - {video.score_away}
-                                                        <img src={video.team_away_logo_url} alt='Away Team Logo'
-                                                             className='team-logo'/>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Место</th>
-                                                    <td>{video.location}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Лига</th>
-                                                    <td>{video.division}</td>
-                                                </tr>
+                                                    <tr>
+                                                        <th>Счет</th>
+                                                        <td>
+                                                            <img
+                                                                src={imglogo}
+                                                                alt="Home Team Logo"
+                                                                className="team-logo"
+                                                            />
+                                                            {video.score_home} - {video.score_away}
+                                                            <img
+                                                                src={video.team_away_logo_url}
+                                                                alt="Away Team Logo"
+                                                                className="team-logo"
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Место</th>
+                                                        <td>{video.location}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Лига</th>
+                                                        <td>{video.division}</td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                             <button className="button" onClick={() => handleCardClick(video.id)}>
@@ -366,20 +372,19 @@ const Matches: FC = () => {
                         </div>
                         {hasMoreVideos && isLoading && <div className="loading-spinner"></div>}
                         {!isLoading && (
-                            <button onClick={handleShowMore}
-                                    className={`show-more-button ${!hasMoreVideos ? 'hidden' : ''}`}
-                                    disabled={!hasMoreVideos}>
+                            <button
+                                onClick={handleShowMore}
+                                className={`show-more-button ${!hasMoreVideos ? 'hidden' : ''}`}
+                                disabled={!hasMoreVideos}
+                            >
                                 Показать больше
                             </button>
-                        )}{!hasMoreVideos && (
-                        <div className="no-more-videos-message">
-                            Видео больше нет
-                        </div>
-                    )}
+                        )}
+                        {!hasMoreVideos && <div className="no-more-videos-message">Видео больше нет</div>}
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };

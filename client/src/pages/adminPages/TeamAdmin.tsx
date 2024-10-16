@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import React, {useState, useEffect} from 'react';
+import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
 import TeamService from '../../api/services/TeamService';
-import { TeamResponse } from '../../api/models/response/TeamResponse';
-import { uploadImage } from './functions/uploadImage';
+import {TeamResponse} from '../../api/models/response/TeamResponse';
+import {uploadImage} from './functions/uploadImage';
 import './TeamAdmin.css';
 
 const roles = ['защитник', 'нападающий', 'вратарь', 'полузащитник'];
@@ -40,7 +40,16 @@ const TeamAdmin = () => {
     };
 
     const handleAddOrUpdatePlayer = async () => {
-        if (!firstName || !lastName || !middleName || gamesPlayed < 0 || goalsScored < 0 || assistsMade < 0 || yellowCards < 0 || redCards < 0) {
+        if (
+            !firstName ||
+            !lastName ||
+            !middleName ||
+            gamesPlayed < 0 ||
+            goalsScored < 0 ||
+            assistsMade < 0 ||
+            yellowCards < 0 ||
+            redCards < 0
+        ) {
             setErrorMessage('Заполните все поля корректно!');
             return;
         }
@@ -54,7 +63,8 @@ const TeamAdmin = () => {
 
             if (isEditing && editPlayerId !== null) {
                 if (originalPlayer) {
-                    const isPlayerChanged = originalPlayer.first_name !== firstName ||
+                    const isPlayerChanged =
+                        originalPlayer.first_name !== firstName ||
                         originalPlayer.last_name !== lastName ||
                         originalPlayer.middle_name !== middleName ||
                         originalPlayer.role !== role ||
@@ -66,14 +76,37 @@ const TeamAdmin = () => {
                         originalPlayer.photo_url !== uploadedPhotoUrl; // Сравнение photo_url
 
                     if (isPlayerChanged) {
-                        await TeamService.updatePartPlayer(editPlayerId, firstName, lastName, middleName, role, gamesPlayed, goalsScored, assistsMade, yellowCards, redCards, uploadedPhotoUrl);
+                        await TeamService.updatePartPlayer(
+                            editPlayerId,
+                            firstName,
+                            lastName,
+                            middleName,
+                            role,
+                            gamesPlayed,
+                            goalsScored,
+                            assistsMade,
+                            yellowCards,
+                            redCards,
+                            uploadedPhotoUrl,
+                        );
                         setSuccessMessage('Игрок обновлен.');
                     } else {
                         setSuccessMessage('Ничего не изменилось.');
                     }
                 }
             } else {
-                await TeamService.createPlayer(firstName, lastName, middleName, role, gamesPlayed, goalsScored, assistsMade, yellowCards, redCards, uploadedPhotoUrl);
+                await TeamService.createPlayer(
+                    firstName,
+                    lastName,
+                    middleName,
+                    role,
+                    gamesPlayed,
+                    goalsScored,
+                    assistsMade,
+                    yellowCards,
+                    redCards,
+                    uploadedPhotoUrl,
+                );
                 setSuccessMessage('Игрок добавлен.');
             }
 
@@ -135,10 +168,8 @@ const TeamAdmin = () => {
     return (
         <div className="team-admin-container">
             <h2 className="team-admin-title">{isEditing ? 'Редактировать игрока' : 'Добавить игрока'}</h2>
-
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             {successMessage && <div className="success-message">{successMessage}</div>}
-
             <label>
                 Имя:
                 <input
@@ -171,11 +202,7 @@ const TeamAdmin = () => {
             </label>
             <label>
                 Роль:
-                <select
-                    className="team-admin-select"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                >
+                <select className="team-admin-select" value={role} onChange={(e) => setRole(e.target.value)}>
                     {roles.map((role) => (
                         <option key={role} value={role}>
                             {role}
@@ -238,7 +265,6 @@ const TeamAdmin = () => {
                     onChange={(e) => setRedCards(Number(e.target.value))}
                 />
             </label>
-
             {/* Поле для загрузки изображения */}
             <label>
                 Загрузить изображение:
@@ -253,12 +279,11 @@ const TeamAdmin = () => {
                     }}
                 />
             </label>
-            {photoUrl && <img src={photoUrl} alt="Uploaded" className="uploaded-admin-image" />} {/* Предварительный просмотр изображения */}
-
+            {photoUrl && <img src={photoUrl} alt="Uploaded" className="uploaded-admin-image" />}{' '}
+            {/* Предварительный просмотр изображения */}
             <button className="team-admin-button" onClick={handleAddOrUpdatePlayer}>
                 {isEditing ? 'Сохранить изменения' : 'Добавить игрока'}
             </button>
-
             <div className="players-admin-list">
                 <h3 className="players-admin-list-title">Список игроков</h3>
                 <ul className="players-admin-list-items">
@@ -269,7 +294,10 @@ const TeamAdmin = () => {
                                 <p>{`Роль: ${player.role}`}</p>
                                 <p>{`Игр: ${player.games_played}, Голов: ${player.goals_scored}`}</p>
                                 <p>{`Ассисты: ${player.assists_made}, Желтые: ${player.yellow_cards}, Красные: ${player.red_cards}`}</p>
-                                {player.photo_url && <img src={player.photo_url} alt="Player" className="player-admin-image" />} {/* Предварительный просмотр изображения игрока */}
+                                {player.photo_url && (
+                                    <img src={player.photo_url} alt="Player" className="player-admin-image" />
+                                )}{' '}
+                                {/* Предварительный просмотр изображения игрока */}
                             </div>
                             <div className="players-admin-list-item-actions">
                                 <button className="edit-button" onClick={() => handleEditPlayer(player.id)}>

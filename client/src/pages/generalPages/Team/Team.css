@@ -1,18 +1,15 @@
-.h1-block{
+.h1-block {
     width: 80vw;
     background-color: white;
     display: flex;
-
 }
 
-
 .team-container {
-    background-image: url("../../../images/memories-on-35mm-d8cwbw41IO8-unsplash.jpg");
+    background-image: url('../../../images/memories-on-35mm-d8cwbw41IO8-unsplash.jpg');
     min-height: 100vh;
+}
 
-  }
-
-  .team-table {
+.team-table {
     width: 80%;
     border-collapse: collapse;
     text-align: left;
@@ -20,34 +17,32 @@
     margin: 0 auto;
     margin-bottom: 30px;
     background-color: white;
+}
 
-
-  }
-
-  .team-table th, .team-table td {
+.team-table th,
+.team-table td {
     padding: 10px;
     border: 1px solid #ddd;
+}
 
-  }
-
-  .team-table th {
+.team-table th {
     background-color: #f2f2f2;
     text-transform: uppercase;
-  }
+}
 
-  .category-row {
+.category-row {
     background-color: #e9e9e9;
     text-align: center;
     font-weight: bold;
-  }
+}
 
-  .player-info {
+.player-info {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-  }
+}
 
-  .player-image {
+.player-image {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -55,23 +50,23 @@
     object-fit: cover; /* Сохраняет соотношение сторон и обрезает изображение */
 }
 
-  .player-name-role {
+.player-name-role {
     display: flex;
     flex-direction: column;
-  }
+}
 
-
-  .player-name-role strong {
+.player-name-role strong {
     font-size: 16px;
-  }
+}
 
-  .player-name-role span {
+.player-name-role span {
     font-size: 12px;
     color: #666;
-  }
+}
 /* Адаптивные стили для маленьких экранов */
 @media (max-width: 600px) {
-    .team-table th, .team-table td {
+    .team-table th,
+    .team-table td {
         font-size: 10px; /* Уменьшаем размер шрифта для мобильных устройств */
     }
 
@@ -82,7 +77,6 @@
 
     .player-image {
         margin: 0 auto 10px;
-
     }
     .team-table th {
         font-size: 0; /* Делаем текст невидимым */
@@ -92,35 +86,60 @@
         display: none; /* Скрываем имя и роль на очень маленьких экранах */
     }
     /* Устанавливаем сокращенные обозначения через псевдоэлементы */
-    .team-table th:nth-child(1)::after { content: "№"; font-size: 1rem;  }
-    .team-table th:nth-child(2)::after { content: "ФИО"; font-size: 1rem;  }
-    .team-table th:nth-child(3)::after { content: "И"; font-size: 1rem;  }
-    .team-table th:nth-child(4)::after { content: "Г"; font-size: 1rem;  }
-    .team-table th:nth-child(5)::after { content: "П"; font-size: 1rem;  }
+    .team-table th:nth-child(1)::after {
+        content: '№';
+        font-size: 1rem;
+    }
+    .team-table th:nth-child(2)::after {
+        content: 'ФИО';
+        font-size: 1rem;
+    }
+    .team-table th:nth-child(3)::after {
+        content: 'И';
+        font-size: 1rem;
+    }
+    .team-table th:nth-child(4)::after {
+        content: 'Г';
+        font-size: 1rem;
+    }
+    .team-table th:nth-child(5)::after {
+        content: 'П';
+        font-size: 1rem;
+    }
 }
 
-    @media (max-width: 400px) {
-
-        .team-table th, .team-table td {
-            font-size: 8px; /* Уменьшаем размер шрифта для мобильных устройств */
-        }
-        .player-name-role {
-            display: none; /* Скрываем имя и роль на очень маленьких экранах */
-        }
-        .team-table th {
-            font-size: 0; /* Делаем текст невидимым */
-            position: relative; /* Для правильного позиционирования псевдоэлемента */
-        }
-
-        /* Устанавливаем сокращенные обозначения через псевдоэлементы */
-        .team-table th:nth-child(1)::after { content: "№"; font-size: 1rem;  }
-        .team-table th:nth-child(2)::after { content: "ФИО"; font-size: 1rem;  }
-        .team-table th:nth-child(3)::after { content: "И"; font-size: 1rem;  }
-        .team-table th:nth-child(4)::after { content: "Г"; font-size: 1rem;  }
-        .team-table th:nth-child(5)::after { content: "П"; font-size: 1rem;  }
-
+@media (max-width: 400px) {
+    .team-table th,
+    .team-table td {
+        font-size: 8px; /* Уменьшаем размер шрифта для мобильных устройств */
+    }
+    .player-name-role {
+        display: none; /* Скрываем имя и роль на очень маленьких экранах */
+    }
+    .team-table th {
+        font-size: 0; /* Делаем текст невидимым */
+        position: relative; /* Для правильного позиционирования псевдоэлемента */
     }
 
-
-
-
+    /* Устанавливаем сокращенные обозначения через псевдоэлементы */
+    .team-table th:nth-child(1)::after {
+        content: '№';
+        font-size: 1rem;
+    }
+    .team-table th:nth-child(2)::after {
+        content: 'ФИО';
+        font-size: 1rem;
+    }
+    .team-table th:nth-child(3)::after {
+        content: 'И';
+        font-size: 1rem;
+    }
+    .team-table th:nth-child(4)::after {
+        content: 'Г';
+        font-size: 1rem;
+    }
+    .team-table th:nth-child(5)::after {
+        content: 'П';
+        font-size: 1rem;
+    }
+}

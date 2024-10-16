@@ -3,7 +3,7 @@ import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
 import MatchesService from '../../api/services/MatchService';
 import {MatchResponse} from '../../api/models/response/MatchResponse';
 import './MatchesAdmin.css';
-import { uploadImage } from './functions/uploadImage';
+import {uploadImage} from './functions/uploadImage';
 
 const MatchesAdmin = () => {
     const [team1, setTeam1] = useState('КОКОС ГРУПП');
@@ -42,18 +42,39 @@ const MatchesAdmin = () => {
             return;
         }
 
-
         // Оптимистично добавляем новый матч в список
-
 
         try {
             const formattedDate = matchDate;
 
             if (isEditing && editMatchId !== null) {
-                await MatchesService.updatePartMatch(editMatchId, team1, team2, opponentEmblem, score1, score2, venue, league, vkVideoLink, formattedDate, matchTime);
+                await MatchesService.updatePartMatch(
+                    editMatchId,
+                    team1,
+                    team2,
+                    opponentEmblem,
+                    score1,
+                    score2,
+                    venue,
+                    league,
+                    vkVideoLink,
+                    formattedDate,
+                    matchTime,
+                );
                 setSuccessMessage('Матч обновлен.');
             } else {
-                await MatchesService.createMatch(team1, team2, opponentEmblem, score1, score2, venue, league, vkVideoLink, formattedDate, matchTime);
+                await MatchesService.createMatch(
+                    team1,
+                    team2,
+                    opponentEmblem,
+                    score1,
+                    score2,
+                    venue,
+                    league,
+                    vkVideoLink,
+                    formattedDate,
+                    matchTime,
+                );
                 setSuccessMessage('Матч добавлен. Запись появится в течении 20 минут');
             }
 
@@ -178,7 +199,7 @@ const MatchesAdmin = () => {
                 onChange={handleUploadImage}
                 className="matches-admin-input"
             />
-            {opponentEmblem && <img src={opponentEmblem} alt="Эмблема команды противника" className="match-image"/>}
+            {opponentEmblem && <img src={opponentEmblem} alt="Эмблема команды противника" className="match-image" />}
 
             <input
                 type="number"
@@ -249,21 +270,31 @@ const MatchesAdmin = () => {
                         matchesList.map((match) => (
                             <li key={match.id} className="matches-admin-list-item">
                                 <div className="matches-admin-list-item-content">
-                                    <h4>{match.team_home} vs {match.team_away_name}</h4>
-                                    <p>Счет: {match.score_home} - {match.score_away}</p>
+                                    <h4>
+                                        {match.team_home} vs {match.team_away_name}
+                                    </h4>
+                                    <p>
+                                        Счет: {match.score_home} - {match.score_away}
+                                    </p>
                                     <p>Лига: {match.division}</p>
                                     <p>Место: {match.location}</p>
-                                    <p>Дата: {match.match_date}, Время: {match.match_time}</p>
-                                    {match.team_away_logo_url &&
-                                        <img src={match.team_away_logo_url} alt="Эмблема команды"
-                                             className="match-admin-image"/>}
+                                    <p>
+                                        Дата: {match.match_date}, Время: {match.match_time}
+                                    </p>
+                                    {match.team_away_logo_url && (
+                                        <img
+                                            src={match.team_away_logo_url}
+                                            alt="Эмблема команды"
+                                            className="match-admin-image"
+                                        />
+                                    )}
                                 </div>
                                 <div className="matches-admin-list-item-actions">
                                     <button onClick={() => handleEditMatch(match.id)} className="edit-button">
-                                        <EditIcon/>
+                                        <EditIcon />
                                     </button>
                                     <button onClick={() => handleDeleteMatch(match.id)} className="delete-button">
-                                        <DeleteIcon/>
+                                        <DeleteIcon />
                                     </button>
                                 </div>
                             </li>

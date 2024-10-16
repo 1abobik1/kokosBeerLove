@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { observer } from 'mobx-react-lite';
-import { store } from '../../index';
+import React, {FC, useEffect, useState} from 'react';
+import {Navigate} from 'react-router-dom';
+import {observer} from 'mobx-react-lite';
+import {store} from '../../index';
 
-const RequireAuthFan: FC<any> = ({ children }) => {
+const RequireAuthFan: FC<any> = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
@@ -28,11 +28,9 @@ const RequireAuthFan: FC<any> = ({ children }) => {
         checkAuthentication();
     }, []);
 
-
     if (loading) {
         return <div className="loading-spinner"></div>;
     }
-
 
     if (isAuthorized === false) {
         return <Navigate to="/" />;

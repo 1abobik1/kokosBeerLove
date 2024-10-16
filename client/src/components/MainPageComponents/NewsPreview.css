@@ -5,19 +5,19 @@
     margin: 0 auto;
     flex-wrap: wrap;
 }
-.news-section h1{
+.news-section h1 {
     margin-left: 20px;
 }
 
 .more-button {
-    background-color: #E62526; /* Цвет кнопки */
+    background-color: #e62526; /* Цвет кнопки */
     color: white;
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
     margin-bottom: 20px;
-    margin-left: 20px
+    margin-left: 20px;
 }
 
 .news-cards-container {

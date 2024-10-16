@@ -1,5 +1,5 @@
-import {newsApi} from "../http/news";
-import {NewsResponse} from "../models/response/NewsResponse";
+import {newsApi} from '../http/news';
+import {NewsResponse} from '../models/response/NewsResponse';
 
 export default class NewsService {
     static async getAllNews() {

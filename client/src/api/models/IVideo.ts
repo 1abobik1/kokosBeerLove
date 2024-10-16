@@ -1,7 +1,7 @@
-import {MatchResponse} from "./response/MatchResponse";
+import {MatchResponse} from './response/MatchResponse';
 
-export interface IVideo extends MatchResponse{
-    video_url:string;
+export interface IVideo extends MatchResponse {
+    video_url: string;
     hd: number;
     width: number;
     height: number;

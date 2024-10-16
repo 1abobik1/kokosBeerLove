@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import './NewsPreview.css';
 import {Link} from 'react-router-dom';
-import {NewsResponse} from "../../api/models/response/NewsResponse";
-import NewsService from "../../api/services/NewsService";
-import NewsCard from "../News_and_Main_PageComponents/NewsCard";
+import {NewsResponse} from '../../api/models/response/NewsResponse';
+import NewsService from '../../api/services/NewsService';
+import NewsCard from '../News_and_Main_PageComponents/NewsCard';
 
 const NewsPreview = () => {
     const [newsData, setNewsData] = useState<NewsResponse[]>([]);
@@ -35,11 +35,9 @@ const NewsPreview = () => {
                 </Link>
             </button>
             <div className="news-cards-container">
-                {isLoading && (
-                    <div className='loading-spinner'></div>
-                )}
+                {isLoading && <div className="loading-spinner"></div>}
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
-                {newsData.slice(0,6).map((news) => (
+                {newsData.slice(0, 6).map((news) => (
                     <NewsCard
                         key={news.id}
                         id={news.id}
@@ -55,4 +53,3 @@ const NewsPreview = () => {
 };
 
 export default NewsPreview;
-
