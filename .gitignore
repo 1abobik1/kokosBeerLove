@@ -10,7 +10,9 @@ client/dist/
 
 # Local secrets and certificates
 .env
-client/certificates/
+# mkcert certificates for HTTPS; the empty folder is kept so Docker does not create it as root
+client/certificates/*
+!client/certificates/.gitkeep
 server/pswd
 
 # IDE / OS
