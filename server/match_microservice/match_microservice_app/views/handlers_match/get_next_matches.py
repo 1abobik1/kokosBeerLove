@@ -1,4 +1,3 @@
-from datetime import datetime
 
 from django.views.decorators.cache import cache_page
 from drf_yasg import openapi

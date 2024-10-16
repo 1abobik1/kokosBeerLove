@@ -1,7 +1,6 @@
 from django.views.decorators.cache import cache_page
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response

@@ -53,5 +53,5 @@ def refresh_token(request):
             'access': str(new_access_token)
         }, status=status.HTTP_200_OK)
 
-    except Exception as e:
+    except Exception:
         return Response({'error': 'Недействительный refresh токен'}, status=status.HTTP_401_UNAUTHORIZED)
