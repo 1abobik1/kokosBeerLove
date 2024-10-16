@@ -1,4 +1,5 @@
 """Settings of auth_microservice: the common base (server/common/base_settings.py) plus users and email."""
+
 from pathlib import Path
 
 from decouple import config

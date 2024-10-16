@@ -13,15 +13,12 @@ from ...serializers import AboutFcKokocSerializer
     operation_description="Получение информации о клубе. Для просмотра данных авторизация не обязательна.",
     tags=["aboutKokocHandlers"],
     responses={
-        200: openapi.Response(
-            description="Информация о клубе успешно получена"),
-        404: openapi.Response(
-            description="Информация о клубе не найдена"),
+        200: openapi.Response(description="Информация о клубе успешно получена"),
+        404: openapi.Response(description="Информация о клубе не найдена"),
     },
 )
-
 @cache_page(60 * 20)
-@api_view(['GET'])
+@api_view(["GET"])
 def get_info_fc_kokoc(request):
     about_fc_kokoc = AboutFcKokoc.get_instance()  # Получаем единственную запись
     serializer = AboutFcKokocSerializer(about_fc_kokoc)

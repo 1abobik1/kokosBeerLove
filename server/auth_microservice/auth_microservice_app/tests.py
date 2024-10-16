@@ -16,7 +16,9 @@ class SignupFlowTests(TestCase):
         self.client = APIClient()
 
     def request_code(self, email="fan@example.com", username="fan"):
-        return self.client.post("/api/auth/verify-email/", {"email": email, "username": username}, format="json")
+        return self.client.post(
+            "/api/auth/verify-email/", {"email": email, "username": username}, format="json"
+        )
 
     def sent_code(self):
         return re.search(r"\d{6}", mail.outbox[-1].body).group(0)
@@ -52,7 +54,9 @@ class SignupFlowTests(TestCase):
 
     def test_code_expires(self):
         self.request_code()
-        VerificationCode.objects.update(created_at=VerificationCode.objects.get().created_at - timedelta(minutes=11))
+        VerificationCode.objects.update(
+            created_at=VerificationCode.objects.get().created_at - timedelta(minutes=11)
+        )
         self.assertEqual(self.signup(code=self.sent_code()).status_code, 400)
 
     def test_code_is_blocked_after_too_many_attempts(self):

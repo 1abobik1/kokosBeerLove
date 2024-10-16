@@ -1,4 +1,5 @@
 """Helpers for the services' tests."""
+
 from django.test import override_settings
 from rest_framework_simplejwt.tokens import AccessToken
 

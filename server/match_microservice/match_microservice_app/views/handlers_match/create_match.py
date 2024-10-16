@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from common.permissions import IsAdminToken
+
 from ...serializers import MatchCreateSerializer
 
 
@@ -14,14 +15,10 @@ from ...serializers import MatchCreateSerializer
     tags=["Create Update Delete "],
     request_body=MatchCreateSerializer,
     responses={
-        201: openapi.Response(
-            description="Матч успешно создан"),
-        400: openapi.Response(
-            description="Неправильные данные"),
-        401: openapi.Response(
-            description="Неавторизован"),
-        403: openapi.Response(
-            description="Нет прав доступа"),
+        201: openapi.Response(description="Матч успешно создан"),
+        400: openapi.Response(description="Неправильные данные"),
+        401: openapi.Response(description="Неавторизован"),
+        403: openapi.Response(description="Нет прав доступа"),
     },
 )
 @api_view(["POST"])

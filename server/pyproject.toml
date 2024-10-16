@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 110
+extend-exclude = "migrations"
+
+[tool.isort]
+profile = "black"
+line_length = 110
+known_first_party = ["common"]
+skip_glob = ["*/migrations/*"]

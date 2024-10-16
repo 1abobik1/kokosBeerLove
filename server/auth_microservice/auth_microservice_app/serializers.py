@@ -40,18 +40,14 @@ class SignupSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = [
-            "first_name",
-            "last_name",
-            "phone_number",
-            "telegram",
-            "avatar_url"]
+        fields = ["first_name", "last_name", "phone_number", "telegram", "avatar_url"]
 
 
 class UserAllDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['email', 'username', 'first_name', 'last_name', 'phone_number', 'telegram', 'avatar_url']
+        fields = ["email", "username", "first_name", "last_name", "phone_number", "telegram", "avatar_url"]
+
 
 class AvatarUploadSerializer(serializers.Serializer):
     avatar_url = serializers.URLField(required=True)
@@ -59,7 +55,7 @@ class AvatarUploadSerializer(serializers.Serializer):
 
 class EmailVerificationSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    username = serializers.CharField(required=True) 
+    username = serializers.CharField(required=True)
 
 
 class LoginSerializer(serializers.Serializer):

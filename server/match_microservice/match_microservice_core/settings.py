@@ -1,4 +1,5 @@
 """Settings of match_microservice: the common base (server/common/base_settings.py) plus what is specific to it."""
+
 from pathlib import Path
 
 from decouple import config

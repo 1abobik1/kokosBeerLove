@@ -47,8 +47,7 @@ def get_player_by_id(request, player_id):
     try:
         player = Player.objects.get(id=player_id)
     except Player.DoesNotExist:
-        return Response({"error": "Игрок не найден"},
-                        status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Игрок не найден"}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = PlayerSerializer(player)
     return Response(serializer.data, status=status.HTTP_200_OK)

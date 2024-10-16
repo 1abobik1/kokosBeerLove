@@ -20,7 +20,9 @@ class ShopTests(TestCase):
     def setUp(self):
         cache.clear()
         self.client = APIClient()
-        self.assertEqual(self.client.post("/api/shop/create_product/", PRODUCT, format="json", **ADMIN).status_code, 201)
+        self.assertEqual(
+            self.client.post("/api/shop/create_product/", PRODUCT, format="json", **ADMIN).status_code, 201
+        )
         self.product_id = self.client.get("/api/shop/get_all/").json()[0]["id"]
 
     def add(self, quantity, size="M"):
@@ -28,8 +30,12 @@ class ShopTests(TestCase):
         return self.client.post("/api/shop/add_to_cart/", body, format="json", **FAN)
 
     def test_only_admin_manages_products(self):
-        self.assertEqual(self.client.post("/api/shop/create_product/", PRODUCT, format="json", **FAN).status_code, 403)
-        self.assertEqual(self.client.delete(f"/api/shop/delete_product/{self.product_id}/", **FAN).status_code, 403)
+        self.assertEqual(
+            self.client.post("/api/shop/create_product/", PRODUCT, format="json", **FAN).status_code, 403
+        )
+        self.assertEqual(
+            self.client.delete(f"/api/shop/delete_product/{self.product_id}/", **FAN).status_code, 403
+        )
 
     def test_update_returns_the_product_and_list_is_fresh(self):
         response = self.client.patch(

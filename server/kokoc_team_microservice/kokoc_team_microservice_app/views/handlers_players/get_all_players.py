@@ -9,7 +9,7 @@ from ...serializers import PlayerSerializer
 
 
 @swagger_auto_schema(
-    method='get',
+    method="get",
     operation_description="Получение списка всех игроков. Данные кэшируются на 15 минут.",
     tags=["playerHandlers"],
     responses={
@@ -28,15 +28,15 @@ from ...serializers import PlayerSerializer
                         "assists_made": 2,
                         "yellow_cards": 1,
                         "red_cards": 0,
-                        "photo_url": "http://example.com/photos/ivanov.jpg"
+                        "photo_url": "http://example.com/photos/ivanov.jpg",
                     }
                 ]
-            }
+            },
         )
-    }
+    },
 )
 @cache_page(60 * 20)
-@api_view(['GET'])
+@api_view(["GET"])
 def get_all_players(request):
     players = Player.objects.all()
     serializer = PlayerSerializer(players, many=True)

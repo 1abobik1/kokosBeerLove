@@ -10,16 +10,16 @@ from ...serializers import ProductSerializer
 
 
 @swagger_auto_schema(
-    method='get',
+    method="get",
     operation_description="Получение конкретного товара по ID",
-    tags=['productHandlers'],
+    tags=["productHandlers"],
     responses={
         200: openapi.Response(description="Успешный ответ с данными товара", schema=ProductSerializer),
-        404: openapi.Response(description="Товар не найден")
-    }
+        404: openapi.Response(description="Товар не найден"),
+    },
 )
 @cache_page(60 * 20)
-@api_view(['GET'])
+@api_view(["GET"])
 def get_product_by_id(request, product_id):
     try:
         # Получаем конкретный товар по id
@@ -31,4 +31,4 @@ def get_product_by_id(request, product_id):
         # Возвращаем успешный ответ с данными товара
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Product.DoesNotExist:
-        return Response({'error': 'Товар не найден'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Товар не найден"}, status=status.HTTP_404_NOT_FOUND)

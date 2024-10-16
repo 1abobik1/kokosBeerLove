@@ -1,8 +1,7 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.decorators import (api_view, authentication_classes,
-                                       permission_classes)
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
@@ -11,12 +10,14 @@ from ...models import CartItem
 
 
 @swagger_auto_schema(
-    method='delete',
+    method="delete",
     operation_description="Удаление товара из корзины по ID элемента корзины",
-    tags=['cartHandlers'],
+    tags=["cartHandlers"],
     manual_parameters=[
-        openapi.Parameter('cart_item_id', openapi.IN_PATH, description="ID элемента корзины", type=openapi.TYPE_INTEGER),
-        openapi.Parameter('size', openapi.IN_QUERY, description="Размер товара", type=openapi.TYPE_STRING)
+        openapi.Parameter(
+            "cart_item_id", openapi.IN_PATH, description="ID элемента корзины", type=openapi.TYPE_INTEGER
+        ),
+        openapi.Parameter("size", openapi.IN_QUERY, description="Размер товара", type=openapi.TYPE_STRING),
     ],
     responses={
         204: openapi.Response(description="Товар успешно удален из корзины"),
@@ -24,14 +25,14 @@ from ...models import CartItem
         404: openapi.Response(description="Товар не найден в корзине"),
         401: openapi.Response(description="Не авторизован"),
         403: openapi.Response(description="Доступ запрещен"),
-    }
+    },
 )
-@api_view(['DELETE'])
+@api_view(["DELETE"])
 @authentication_classes([JWTTokenUserAuthentication])
 @permission_classes([IsAuthenticated])
 def remove_item_from_cart(request, cart_item_id):
     user_id = request.user.id
-    size = request.query_params.get('size', '').upper()  # Получаем размер товара из запроса
+    size = request.query_params.get("size", "").upper()  # Получаем размер товара из запроса
 
     if not size:
         return Response({"error": "Размер товара должен быть указан"}, status=status.HTTP_400_BAD_REQUEST)

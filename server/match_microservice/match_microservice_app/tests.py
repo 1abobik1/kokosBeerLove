@@ -13,7 +13,12 @@ class MatchTests(TestCase):
         cache.clear()
         self.client = APIClient()
         self.match = Match.objects.create(
-            team_home="Кокос", team_away_name="Гости", score_home=2, score_away=1, location="Москва", division="A"
+            team_home="Кокос",
+            team_away_name="Гости",
+            score_home=2,
+            score_away=1,
+            location="Москва",
+            division="A",
         )
 
     def test_delete_is_admin_only_and_list_is_fresh(self):

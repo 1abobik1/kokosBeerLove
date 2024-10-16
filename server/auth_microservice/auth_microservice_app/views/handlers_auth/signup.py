@@ -54,7 +54,9 @@ def signup(request):
             user = serializer.save()
             VerificationCode.objects.filter(email__iexact=email).delete()
     except IntegrityError:
-        return Response({"error": "Пользователь с таким email уже существует"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": "Пользователь с таким email уже существует"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     refresh = CustomRefreshToken.for_user(user)
     expires_at = timezone.now() + RefreshTokenModel.LIFETIME

@@ -42,13 +42,20 @@ def verify_email(request):
     username = serializer.validated_data["username"]
 
     if CustomUser.objects.filter(email__iexact=email).exists():
-        return Response({"detail": "Пользователь с таким email уже зарегистрирован."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Пользователь с таким email уже зарегистрирован."}, status=status.HTTP_400_BAD_REQUEST
+        )
     if CustomUser.objects.filter(username=username).exists():
-        return Response({"detail": "Пользователь с таким именем уже зарегистрирован."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Пользователь с таким именем уже зарегистрирован."}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     last = VerificationCode.objects.filter(email__iexact=email).order_by("-created_at").first()
     if last and timezone.now() < last.created_at + VerificationCode.RESEND_INTERVAL:
-        return Response({"detail": "Код уже отправлен. Повторить можно через минуту."}, status=status.HTTP_429_TOO_MANY_REQUESTS)
+        return Response(
+            {"detail": "Код уже отправлен. Повторить можно через минуту."},
+            status=status.HTTP_429_TOO_MANY_REQUESTS,
+        )
 
     code = f"{secrets.randbelow(1_000_000):06d}"
     try:
@@ -61,7 +68,9 @@ def verify_email(request):
         )
     except (BadHeaderError, SMTPException, OSError) as error:
         logger.error("Ошибка при отправке email: %s", error)
-        return Response({"detail": "Не удалось отправить письмо."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(
+            {"detail": "Не удалось отправить письмо."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
     # Only the latest code is valid.
     VerificationCode.objects.filter(email__iexact=email).delete()

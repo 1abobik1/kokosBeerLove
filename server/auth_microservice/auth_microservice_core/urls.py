@@ -11,30 +11,18 @@ schema_view = get_schema_view(
         description="Все запросы начинаются с http://127.0.0.1:8000/api/auth/ если сервер локальный и на порту 8000",
     ),
     public=True,
-    permission_classes=(
-        permissions.AllowAny,
-    ),
+    permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
-    path(
-        "admin/",
-        admin.site.urls),
+    path("admin/", admin.site.urls),
     path(
         "swagger/",
-        schema_view.with_ui(
-            "swagger",
-            cache_timeout=0),
+        schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
-    path(
-        "swagger.json/",
-        schema_view.without_ui(
-            cache_timeout=0),
-        name="schema-json"),
-    path(
-        "api/auth/",
-        include("auth_microservice_app.urls")),
+    path("swagger.json/", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    path("api/auth/", include("auth_microservice_app.urls")),
 ]
 
 # if settings.DEBUG:

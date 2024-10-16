@@ -12,7 +12,7 @@ from ...serializers import ProductSerializer
 @swagger_auto_schema(
     method="get",
     operation_description="Получение всех товаров",
-    tags=['productHandlers'],
+    tags=["productHandlers"],
     responses={
         200: openapi.Response(
             description="Успешный ответ с данными всех товаров",
@@ -20,9 +20,8 @@ from ...serializers import ProductSerializer
         ),
     },
 )
-
 @cache_page(60 * 20)
-@api_view(['GET'])
+@api_view(["GET"])
 def get_all_products(request):
     # Получаем все товары из базы данных
     products = Product.objects.all()

@@ -9,23 +9,28 @@ from ...serializers import NewsArticleSerializer
 
 
 @swagger_auto_schema(
-    method='get',
+    method="get",
     operation_description="Получение всех новостей",
-    tags=['NewsArticle'],
-    responses={200: openapi.Response(description="Список всех новостей", examples={
-        "application/json": [
-            {
-                "id": 1,
-                "title": "Заголовок новости",
-                "text": "Текст новости",
-                "image_url": "news_images/image",
-                "created_at": "2024-10-06T12:00:00Z"
-            }
-        ]
-    })}
+    tags=["NewsArticle"],
+    responses={
+        200: openapi.Response(
+            description="Список всех новостей",
+            examples={
+                "application/json": [
+                    {
+                        "id": 1,
+                        "title": "Заголовок новости",
+                        "text": "Текст новости",
+                        "image_url": "news_images/image",
+                        "created_at": "2024-10-06T12:00:00Z",
+                    }
+                ]
+            },
+        )
+    },
 )
 @cache_page(60 * 20)
-@api_view(['GET'])
+@api_view(["GET"])
 def get_all_news_articles(request):
     articles = NewsArticle.objects.all()
     serializer = NewsArticleSerializer(articles, many=True)

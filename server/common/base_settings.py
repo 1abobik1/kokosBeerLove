@@ -4,6 +4,7 @@ A service's settings.py does `from common.base_settings import *` and then sets 
 SECRET_KEY, INSTALLED_APPS, ROOT_URLCONF, WSGI_APPLICATION, DATABASES and CACHES.
 All values come from the environment (docker compose passes .env), so nothing secret lives in the code.
 """
+
 from datetime import timedelta
 from pathlib import Path
 

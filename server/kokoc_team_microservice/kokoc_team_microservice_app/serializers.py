@@ -12,9 +12,4 @@ class PlayerSerializer(serializers.ModelSerializer):
 class AboutFcKokocSerializer(serializers.ModelSerializer):
     class Meta:
         model = AboutFcKokoc
-        fields = [
-            "games_played",
-            "wins",
-            "goals_scored",
-            "tournaments",
-            "about_text"]
+        fields = ["games_played", "wins", "goals_scored", "tournaments", "about_text"]

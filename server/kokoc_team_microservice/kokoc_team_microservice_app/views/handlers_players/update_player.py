@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from common.permissions import IsAdminToken
+
 from ...models import Player
 from ...serializers import PlayerSerializer
 
@@ -17,16 +18,11 @@ from ...serializers import PlayerSerializer
     tags=["playerHandlers"],
     request_body=PlayerSerializer,
     responses={
-        200: openapi.Response(
-            description="Информация об игроке успешно обновлена"),
-        400: openapi.Response(
-            description="Неправильные данные"),
-        401: openapi.Response(
-            description="Неавторизован. Необходимо передать токен доступа."),
-        403: openapi.Response(
-            description="У вас нет прав для изменения информации (нужен is_superuser)."),
-        404: openapi.Response(
-            description="Игрок не найден"),
+        200: openapi.Response(description="Информация об игроке успешно обновлена"),
+        400: openapi.Response(description="Неправильные данные"),
+        401: openapi.Response(description="Неавторизован. Необходимо передать токен доступа."),
+        403: openapi.Response(description="У вас нет прав для изменения информации (нужен is_superuser)."),
+        404: openapi.Response(description="Игрок не найден"),
     },
 )
 @swagger_auto_schema(
@@ -35,16 +31,11 @@ from ...serializers import PlayerSerializer
     tags=["playerHandlers"],
     request_body=PlayerSerializer,
     responses={
-        200: openapi.Response(
-            description="Информация об игроке успешно частично обновлена"),
-        400: openapi.Response(
-            description="Неправильные данные"),
-        401: openapi.Response(
-            description="Неавторизован. Необходимо передать токен доступа."),
-        403: openapi.Response(
-            description="У вас нет прав для изменения информации (нужен is_superuser)."),
-        404: openapi.Response(
-            description="Игрок не найден"),
+        200: openapi.Response(description="Информация об игроке успешно частично обновлена"),
+        400: openapi.Response(description="Неправильные данные"),
+        401: openapi.Response(description="Неавторизован. Необходимо передать токен доступа."),
+        403: openapi.Response(description="У вас нет прав для изменения информации (нужен is_superuser)."),
+        404: openapi.Response(description="Игрок не найден"),
     },
 )
 @api_view(["PUT", "PATCH"])
@@ -55,8 +46,7 @@ def update_player(request, player_id):
         # Ищем игрока по id
         player = Player.objects.get(id=player_id)
     except Player.DoesNotExist:
-        return Response({"error": "Игрок не найден"},
-                        status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Игрок не найден"}, status=status.HTTP_404_NOT_FOUND)
 
     data = request.data.copy()
 
